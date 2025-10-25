@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Lightning-fast Lazada checkout bot with captcha solving, multi-region support, and Discord webhooks. Rise to S-Rank shopper with A's Solution.">
+    <meta name="keywords" content="Lazada bot, checkout automation, Lazada Philippines, Lazada Vietnam, captcha solver, shopping bot">
+
+    <!-- Open Graph -->
+    <meta property="og:title" content="A's Solution - Lazada Automation Bot">
+    <meta property="og:description" content="Dominate every Lazada checkout with automated shopping bot">
+    <meta property="og:type" content="website">
+    <meta property="og:image" content="/assets/og-image.png">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="A's Solution - Lazada Bot">
+    <meta name="twitter:description" content="Lightning-fast automated checkout for Lazada">
+
+    <title>A's Solution - Lazada Automation Bot | Dominate Every Checkout</title>
+
+    <!-- Preconnect to Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+
+    <!-- Stylesheet -->
+    <link rel="stylesheet" href="css/styles.css">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+</head>
+<body>
+    <!-- Skip to content link for accessibility -->
+    <a href="#main-content" class="skip-to-content">Skip to main content</a>
+
+    <!-- Three.js Particle Background -->
+    <canvas id="particles-canvas" aria-hidden="true"></canvas>
+
+    <!-- Header -->
+    <header role="banner" class="header">
+        <div class="container">
+            <div class="logo">
+                <svg class="logo-svg" width="200" height="50" viewBox="0 0 200 50" aria-labelledby="logo-title">
+                    <title id="logo-title">A's Solution</title>
+                    <text x="10" y="35" class="logo-text">A'S SOLUTION</text>
+                </svg>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main id="main-content" role="main">
+
+        <!-- Hero Section -->
+        <section class="hero" id="hero">
+            <div class="hero-background">
+                <!-- Geometric shapes for decoration -->
+                <div class="geometric-shape shape-1" aria-hidden="true"></div>
+                <div class="geometric-shape shape-2" aria-hidden="true"></div>
+                <div class="geometric-shape shape-3" aria-hidden="true"></div>
+            </div>
+
+            <div class="container hero-container">
+                <h1 class="hero-title animate-on-load">
+                    Dominate Every Checkout
+                </h1>
+                <p class="hero-subtitle animate-on-load">
+                    Rise to S-Rank shopper on Lazada with lightning-fast automation, <br class="hide-mobile">captcha solving, and multi-region support
+                </p>
+                <div class="hero-cta animate-on-load">
+                    <a href="#pricing" class="btn btn-primary" aria-label="Get started with A's Solution">
+                        Get Started
+                    </a>
+                    <a href="#features" class="btn btn-secondary" aria-label="View features">
+                        View Features
+                    </a>
+                </div>
+
+                <!-- Scroll Indicator -->
+                <div class="scroll-indicator animate-bounce" aria-hidden="true">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="6 9 12 15 18 9"></polyline>
+                    </svg>
+                </div>
+            </div>
+        </section>
+
+        <!-- Terminal Showcase Section -->
+        <section class="section terminal-section" id="terminal" aria-labelledby="terminal-heading">
+            <div class="container">
+                <h2 id="terminal-heading" class="section-title">See It In Action</h2>
+                <p class="section-description">Watch A's Solution automate the entire Lazada checkout process</p>
+
+                <div class="terminal-window reveal-on-scroll">
+                    <!-- Window Controls -->
+                    <div class="window-controls">
+                        <span class="control-btn control-close" aria-hidden="true"></span>
+                        <span class="control-btn control-minimize" aria-hidden="true"></span>
+                        <span class="control-btn control-maximize" aria-hidden="true"></span>
+                        <span class="window-title">A's Solution - Terminal</span>
+                    </div>
+
+                    <!-- Terminal Content -->
+                    <div class="terminal-content" role="region" aria-label="Terminal output demonstration">
+                        <div id="terminal-output" class="terminal-output">
+                            <!-- Terminal text will be typed here via JavaScript -->
+                        </div>
+                        <span class="terminal-cursor" aria-hidden="true">█</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Features Section -->
+        <section class="section features-section" id="features" aria-labelledby="features-heading">
+            <div class="container">
+                <h2 id="features-heading" class="section-title">Powerful Features</h2>
+                <p class="section-description">Everything you need to dominate Lazada checkouts</p>
+
+                <div class="features-grid">
+                    <!-- Feature 1: Auto-Update -->
+                    <div class="feature-card reveal-on-scroll">
+                        <div class="feature-icon" aria-hidden="true">
+                            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="23 4 23 10 17 10"></polyline>
+                                <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"></path>
+                            </svg>
+                        </div>
+                        <h3 class="feature-title">Auto-Update System</h3>
+                        <p class="feature-description">Automatic updates ensure compatibility with Lazada's latest changes. Always stay ahead.</p>
+                    </div>
+
+                    <!-- Feature 2: Captcha Support -->
+                    <div class="feature-card reveal-on-scroll">
+                        <div class="feature-icon" aria-hidden="true">
+                            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                                <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                            </svg>
+                        </div>
+                        <h3 class="feature-title">Captcha Support</h3>
+                        <p class="feature-description">Integrated CapSolver, 2Captcha, AYCD, CapMonster, AntiCaptcha. Automatic solving, zero intervention.</p>
+                    </div>
+
+                    <!-- Feature 3: Keyword Search -->
+                    <div class="feature-card reveal-on-scroll">
+                        <div class="feature-icon" aria-hidden="true">
+                            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="11" cy="11" r="8"></circle>
+                                <path d="m21 21-4.35-4.35"></path>
+                            </svg>
+                        </div>
+                        <h3 class="feature-title">Keyword Search</h3>
+                        <p class="feature-description">Monitor products by keyword, auto-checkout when available. Perfect for flash sales and restocks.</p>
+                    </div>
+
+                    <!-- Feature 4: Multi-Region -->
+                    <div class="feature-card reveal-on-scroll">
+                        <div class="feature-icon" aria-hidden="true">
+                            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="12" cy="12" r="10"></circle>
+                                <line x1="2" y1="12" x2="22" y2="12"></line>
+                                <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+                            </svg>
+                        </div>
+                        <h3 class="feature-title">Multi-Region Support</h3>
+                        <p class="feature-description">Works across all Southeast Asia regions: SG, MY, TH, PH, VN, ID. One bot, six countries.</p>
+                    </div>
+
+                    <!-- Feature 5: Discord Webhooks -->
+                    <div class="feature-card reveal-on-scroll">
+                        <div class="feature-icon" aria-hidden="true">
+                            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+                                <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+                            </svg>
+                        </div>
+                        <h3 class="feature-title">Discord Webhooks</h3>
+                        <p class="feature-description">Real-time notifications for successful checkouts. Track your wins instantly on Discord.</p>
+                    </div>
+
+                    <!-- Feature 6: License System -->
+                    <div class="feature-card reveal-on-scroll">
+                        <div class="feature-icon" aria-hidden="true">
+                            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"></path>
+                            </svg>
+                        </div>
+                        <h3 class="feature-title">Secure License System</h3>
+                        <p class="feature-description">Whop integration with HWID binding. Secure, instant delivery, protected access.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Supported Sites Section -->
+        <section class="section supported-sites-section" id="supported-sites" aria-labelledby="sites-heading">
+            <div class="container">
+                <h2 id="sites-heading" class="section-title">Supported Regions</h2>
+                <p class="section-description">Shop across Southeast Asia with one powerful bot</p>
+
+                <div class="sites-grid">
+                    <div class="site-card reveal-on-scroll">
+                        <div class="flag-icon">🇸🇬</div>
+                        <h3 class="site-code">SG</h3>
+                        <p class="site-name">Singapore</p>
+                    </div>
+                    <div class="site-card reveal-on-scroll">
+                        <div class="flag-icon">🇲🇾</div>
+                        <h3 class="site-code">MY</h3>
+                        <p class="site-name">Malaysia</p>
+                    </div>
+                    <div class="site-card reveal-on-scroll">
+                        <div class="flag-icon">🇹🇭</div>
+                        <h3 class="site-code">TH</h3>
+                        <p class="site-name">Thailand</p>
+                    </div>
+                    <div class="site-card reveal-on-scroll">
+                        <div class="flag-icon">🇵🇭</div>
+                        <h3 class="site-code">PH</h3>
+                        <p class="site-name">Philippines</p>
+                    </div>
+                    <div class="site-card reveal-on-scroll">
+                        <div class="flag-icon">🇻🇳</div>
+                        <h3 class="site-code">VN</h3>
+                        <p class="site-name">Vietnam</p>
+                    </div>
+                    <div class="site-card reveal-on-scroll">
+                        <div class="flag-icon">🇮🇩</div>
+                        <h3 class="site-code">ID</h3>
+                        <p class="site-name">Indonesia</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Success Showcase Section -->
+        <section class="section success-section" id="success" aria-labelledby="success-heading">
+            <div class="container">
+                <h2 id="success-heading" class="section-title">Proven Results</h2>
+                <p class="section-description">Join thousands of successful shoppers</p>
+
+                <div class="success-grid">
+                    <!-- Stats Column -->
+                    <div class="stats-column reveal-on-scroll">
+                        <div class="stat-item">
+                            <div class="stat-icon" aria-hidden="true">✓</div>
+                            <div class="stat-number" data-target="10000">0</div>
+                            <div class="stat-label">Successful Checkouts</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-icon" aria-hidden="true">⚡</div>
+                            <div class="stat-number"><span data-target="500">0</span>ms</div>
+                            <div class="stat-label">Average Speed</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-icon" aria-hidden="true">🔒</div>
+                            <div class="stat-number"><span data-target="99">0</span>.9%</div>
+                            <div class="stat-label">Uptime</div>
+                        </div>
+                    </div>
+
+                    <!-- Mockup Column -->
+                    <div class="mockup-column reveal-on-scroll">
+                        <div class="discord-mockup">
+                            <div class="discord-header">
+                                <span class="discord-title">A's Solution - Notifications</span>
+                            </div>
+                            <div class="discord-embed">
+                                <div class="embed-border"></div>
+                                <div class="embed-content">
+                                    <div class="embed-title">Checkout Success ✓</div>
+                                    <div class="embed-field">
+                                        <div class="field-name">Product</div>
+                                        <div class="field-value">Premium Gadget (Limited Edition)</div>
+                                    </div>
+                                    <div class="embed-field">
+                                        <div class="field-name">Price</div>
+                                        <div class="field-value">$99.99</div>
+                                    </div>
+                                    <div class="embed-field">
+                                        <div class="field-name">Status</div>
+                                        <div class="field-value success-text">Order Confirmed</div>
+                                    </div>
+                                    <div class="embed-timestamp">Today at 12:34 PM</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Pricing Section -->
+        <section class="section pricing-section" id="pricing" aria-labelledby="pricing-heading">
+            <div class="container">
+                <h2 id="pricing-heading" class="section-title">Simple Pricing</h2>
+                <p class="section-description">One tier, unlimited power</p>
+
+                <div class="pricing-card reveal-on-scroll">
+                    <div class="pricing-badge">Shadow Tier</div>
+                    <div class="pricing-price">
+                        <span class="price-currency">$</span>
+                        <span class="price-amount">69</span>
+                        <span class="price-period">/month</span>
+                    </div>
+
+                    <ul class="pricing-features">
+                        <li class="pricing-feature">
+                            <svg class="check-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" aria-hidden="true">
+                                <polyline points="20 6 9 17 4 12"></polyline>
+                            </svg>
+                            <span>All Lazada regions (6 countries)</span>
+                        </li>
+                        <li class="pricing-feature">
+                            <svg class="check-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" aria-hidden="true">
+                                <polyline points="20 6 9 17 4 12"></polyline>
+                            </svg>
+                            <span>Unlimited tasks & accounts</span>
+                        </li>
+                        <li class="pricing-feature">
+                            <svg class="check-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" aria-hidden="true">
+                                <polyline points="20 6 9 17 4 12"></polyline>
+                            </svg>
+                            <span>Auto captcha solving (all providers)</span>
+                        </li>
+                        <li class="pricing-feature">
+                            <svg class="check-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" aria-hidden="true">
+                                <polyline points="20 6 9 17 4 12"></polyline>
+                            </svg>
+                            <span>Discord webhook notifications</span>
+                        </li>
+                        <li class="pricing-feature">
+                            <svg class="check-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" aria-hidden="true">
+                                <polyline points="20 6 9 17 4 12"></polyline>
+                            </svg>
+                            <span>Priority support & updates</span>
+                        </li>
+                        <li class="pricing-feature">
+                            <svg class="check-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" aria-hidden="true">
+                                <polyline points="20 6 9 17 4 12"></polyline>
+                            </svg>
+                            <span>Lifetime updates included</span>
+                        </li>
+                    </ul>
+
+                    <a href="https://whop.com" class="btn btn-primary btn-pulse" aria-label="Purchase A's Solution license">
+                        Purchase License
+                    </a>
+
+                    <p class="pricing-note">Secure payment via Whop • Instant delivery • HWID protected</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- FAQ Section -->
+        <section class="section faq-section" id="faq" aria-labelledby="faq-heading">
+            <div class="container">
+                <h2 id="faq-heading" class="section-title">Frequently Asked Questions</h2>
+                <p class="section-description">Everything you need to know</p>
+
+                <div class="faq-list">
+                    <!-- FAQ 1 -->
+                    <div class="faq-item reveal-on-scroll">
+                        <button class="faq-question" aria-expanded="false" aria-controls="faq-1">
+                            <span>How does the bot work?</span>
+                            <svg class="faq-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                                <line x1="12" y1="5" x2="12" y2="19"></line>
+                                <line x1="5" y1="12" x2="19" y2="12"></line>
+                            </svg>
+                        </button>
+                        <div class="faq-answer" id="faq-1">
+                            <p>A's Solution monitors Lazada products in real-time, automatically adds items to cart when available, and completes checkout instantly. It uses advanced anti-bot bypass techniques and integrated captcha solving to ensure successful purchases even during high-demand flash sales.</p>
+                        </div>
+                    </div>
+
+                    <!-- FAQ 2 -->
+                    <div class="faq-item reveal-on-scroll">
+                        <button class="faq-question" aria-expanded="false" aria-controls="faq-2">
+                            <span>What captcha services are supported?</span>
+                            <svg class="faq-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                                <line x1="12" y1="5" x2="12" y2="19"></line>
+                                <line x1="5" y1="12" x2="19" y2="12"></line>
+                            </svg>
+                        </button>
+                        <div class="faq-answer" id="faq-2">
+                            <p>We support CapSolver, 2Captcha, CapMonster, AntiCaptcha, and AYCD. Simply configure your preferred provider in the settings.json file with your API key, and the bot handles the rest automatically.</p>
+                        </div>
+                    </div>
+
+                    <!-- FAQ 3 -->
+                    <div class="faq-item reveal-on-scroll">
+                        <button class="faq-question" aria-expanded="false" aria-controls="faq-3">
+                            <span>Is this legal to use?</span>
+                            <svg class="faq-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                                <line x1="12" y1="5" x2="12" y2="19"></line>
+                                <line x1="5" y1="12" x2="19" y2="12"></line>
+                            </svg>
+                        </button>
+                        <div class="faq-answer" id="faq-3">
+                            <p>This software is provided for educational and research purposes. Users are responsible for compliance with Lazada's Terms of Service and all applicable laws in their jurisdiction. We recommend reviewing Lazada's policies before use.</p>
+                        </div>
+                    </div>
+
+                    <!-- FAQ 4 -->
+                    <div class="faq-item reveal-on-scroll">
+                        <button class="faq-question" aria-expanded="false" aria-controls="faq-4">
+                            <span>What regions are supported?</span>
+                            <svg class="faq-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                                <line x1="12" y1="5" x2="12" y2="19"></line>
+                                <line x1="5" y1="12" x2="19" y2="12"></line>
+                            </svg>
+                        </button>
+                        <div class="faq-answer" id="faq-4">
+                            <p>A's Solution works across all Southeast Asia Lazada regions: Singapore (SG), Malaysia (MY), Thailand (TH), Philippines (PH), Vietnam (VN), and Indonesia (ID). Configure the region in your tasks.csv file.</p>
+                        </div>
+                    </div>
+
+                    <!-- FAQ 5 -->
+                    <div class="faq-item reveal-on-scroll">
+                        <button class="faq-question" aria-expanded="false" aria-controls="faq-5">
+                            <span>How do I get a license?</span>
+                            <svg class="faq-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                                <line x1="12" y1="5" x2="12" y2="19"></line>
+                                <line x1="5" y1="12" x2="19" y2="12"></line>
+                            </svg>
+                        </button>
+                        <div class="faq-answer" id="faq-5">
+                            <p>Purchase your license directly through Whop.com via our secure payment portal. You'll receive instant delivery of your license key, which is HWID-locked to your machine for security. Simply enter the key in settings.json to activate.</p>
+                        </div>
+                    </div>
+
+                    <!-- FAQ 6 -->
+                    <div class="faq-item reveal-on-scroll">
+                        <button class="faq-question" aria-expanded="false" aria-controls="faq-6">
+                            <span>Can I use multiple accounts?</span>
+                            <svg class="faq-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                                <line x1="12" y1="5" x2="12" y2="19"></line>
+                                <line x1="5" y1="12" x2="19" y2="12"></line>
+                            </svg>
+                        </button>
+                        <div class="faq-answer" id="faq-6">
+                            <p>Yes! Configure unlimited Lazada accounts and tasks in the tasks.csv file. Each task can have different accounts, regions, products, and settings. Perfect for managing multiple checkout strategies simultaneously.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer role="contentinfo" class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-logo">
+                    <svg class="logo-svg" width="200" height="50" viewBox="0 0 200 50">
+                        <text x="10" y="35" class="logo-text">A'S SOLUTION</text>
+                    </svg>
+                    <p class="footer-tagline">Dominate every checkout</p>
+                </div>
+
+                <div class="footer-links">
+                    <a href="#features">Features</a>
+                    <a href="#pricing">Pricing</a>
+                    <a href="#faq">FAQ</a>
+                    <a href="https://discord.gg/yourdiscord" target="_blank" rel="noopener noreferrer">Discord</a>
+                </div>
+
+                <div class="footer-disclaimer">
+                    <p>Educational use only. Users responsible for compliance with Lazada ToS and local laws.</p>
+                    <p>&copy; 2025 A's Solution. All rights reserved.</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js" defer></script>
+    <script src="js/particles.js" defer></script>
+    <script src="js/app.js" defer></script>
+</body>
+</html>
