@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>A-SOLUTION CLI | Live Demo - Multi-Platform E-Commerce Automation</title>
+    <meta name="description" content="See A-Solution in action - Real-time CLI demo with screen transitions.">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Orbitron:wght@700;900&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --bg-dark: #0a0a0f;
+            --bg-terminal: #1a1a2e;
+            --purple: #8B5CF6;
+            --purple-bright: #A78BFA;
+            --cyan: #06B6D4;
+            --cyan-bright: #22D3EE;
+            --green: #10B981;
+            --orange: #F59E0B;
+            --red: #EF4444;
+            --text: #E5E7EB;
+            --text-muted: #6B7280;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'JetBrains Mono', monospace;
+            background: linear-gradient(135deg, var(--bg-dark) 0%, var(--bg-terminal) 50%, var(--bg-dark) 100%);
+            color: var(--text);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image:
+                radial-gradient(circle at 20% 50%, rgba(139, 92, 246, 0.08) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(6, 182, 212, 0.08) 0%, transparent 50%);
+            animation: pulseGlow 8s ease-in-out infinite;
+            pointer-events: none;
+        }
+
+        @keyframes pulseGlow {
+            0%, 100% { opacity: 0.5; }
+            50% { opacity: 1; }
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 2rem;
+            z-index: 10;
+        }
+
+        .logo-ascii {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, var(--purple), var(--cyan));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: 2px;
+            margin-bottom: 0.5rem;
+        }
+
+        .subtitle {
+            color: var(--text-muted);
+            font-size: 0.875rem;
+            margin-bottom: 1rem;
+        }
+
+        .terminal-container {
+            width: 100%;
+            max-width: 900px;
+            background: var(--bg-terminal);
+            border-radius: 12px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5),
+                        0 0 40px rgba(139, 92, 246, 0.2);
+            overflow: hidden;
+            z-index: 10;
+        }
+
+        .window-header {
+            background: rgba(30, 30, 45, 0.9);
+            padding: 0.75rem 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            border-bottom: 1px solid rgba(139, 92, 246, 0.2);
+        }
+
+        .control-btn {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+
+        .control-close { background: #EF4444; }
+        .control-minimize { background: #F59E0B; }
+        .control-maximize { background: #10B981; }
+
+        .window-title {
+            margin-left: 1rem;
+            font-size: 0.875rem;
+            color: var(--text-muted);
+        }
+
+        .terminal-screen {
+            padding: 1.5rem;
+            height: 500px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .screen {
+            position: absolute;
+            top: 1.5rem;
+            left: 1.5rem;
+            right: 1.5rem;
+            bottom: 1.5rem;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            pointer-events: none;
+        }
+
+        .screen.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .screen-content {
+            font-size: 0.875rem;
+            line-height: 1.6;
+        }
+
+        .cursor {
+            display: inline-block;
+            width: 8px;
+            height: 16px;
+            background: var(--purple-bright);
+            animation: blink 1s infinite;
+            margin-left: 4px;
+            vertical-align: middle;
+        }
+
+        @keyframes blink {
+            0%, 50% { opacity: 1; }
+            51%, 100% { opacity: 0; }
+        }
+
+        .text-purple { color: var(--purple-bright); }
+        .text-cyan { color: var(--cyan-bright); }
+        .text-green { color: var(--green); }
+        .text-orange { color: var(--orange); }
+        .text-red { color: var(--red); }
+        .text-muted { color: var(--text-muted); }
+        .text-bold { font-weight: 700; }
+
+        .divider {
+            color: var(--cyan);
+            margin: 0.5rem 0;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 4px;
+            background: rgba(139, 92, 246, 0.2);
+            border-radius: 2px;
+            overflow: hidden;
+            margin: 1rem 0;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--purple), var(--cyan));
+            animation: progressFill 2s ease-in-out forwards;
+        }
+
+        @keyframes progressFill {
+            from { width: 0%; }
+            to { width: 100%; }
+        }
+
+        .fade-in {
+            animation: fadeInUp 0.4s ease forwards;
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 2rem;
+            z-index: 10;
+        }
+
+        .footer-link {
+            color: var(--purple-bright);
+            text-decoration: none;
+            font-size: 0.875rem;
+            transition: color 0.3s;
+        }
+
+        .footer-link:hover {
+            color: var(--cyan);
+        }
+
+        @media (max-width: 768px) {
+            body { padding: 1rem; }
+            .logo-ascii { font-size: 1.5rem; }
+            .terminal-screen { height: 400px; padding: 1rem; }
+            .screen { top: 1rem; left: 1rem; right: 1rem; bottom: 1rem; }
+            .screen-content { font-size: 0.75rem; }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="logo-ascii">A-SOLUTION</div>
+        <div class="subtitle">Multi-Platform E-Commerce Automation • Lazada + Shopee</div>
+    </div>
+
+    <div class="terminal-container">
+        <div class="window-header">
+            <span class="control-btn control-close"></span>
+            <span class="control-btn control-minimize"></span>
+            <span class="control-btn control-maximize"></span>
+            <span class="window-title">a-solution.exe</span>
+        </div>
+        <div class="terminal-screen" id="terminal"></div>
+    </div>
+
+    <div class="footer">
+        <a href="index.html" class="footer-link">← Back to Main Site</a>
+    </div>
+
+    <script>
+        const terminal = document.getElementById('terminal');
+        let currentScreen = null;
+        let animationTimeout = null;
+
+        // Screen Templates
+        const screens = {
+            banner: `
+                <div class="screen-content fade-in">
+                    <pre class="text-purple">
+  █████╗       ███████╗ ██████╗ ██╗     ██╗   ██╗████████╗██╗ ██████╗ ███╗   ██╗
+ ██╔══██╗      ██╔════╝██╔═══██╗██║     ██║   ██║╚══██╔══╝██║██╔═══██╗████╗  ██║
+ ███████║█████╗███████╗██║   ██║██║     ██║   ██║   ██║   ██║██║   ██║██╔██╗ ██║
+ ██╔══██║╚════╝╚════██║██║   ██║██║     ██║   ██║   ██║   ██║██║   ██║██║╚██╗██║
+ ██║  ██║      ███████║╚██████╔╝███████╗╚██████╔╝   ██║   ██║╚██████╔╝██║ ╚████║
+ ╚═╝  ╚═╝      ╚══════╝ ╚═════╝ ╚══════╝ ╚═════╝    ╚═╝   ╚═╝ ╚═════╝ ╚═╝  ╚═══╝
+                    </pre>
+                    <div class="text-cyan text-bold" style="text-align: center; margin-top: 1rem;">
+                        E-commerce SEA Modules • Multi-Platform Bot
+                    </div>
+                    <div class="text-cyan" style="text-align: center; margin-bottom: 2rem;">
+                        Lazada + Shopee • v0.0.16
+                    </div>
+                </div>
+            `,
+
+            auth: `
+                <div class="screen-content fade-in">
+                    <div class="text-purple text-bold">Step 1:</div>
+                    <div class="text-bold">Authentication</div>
+                    <div class="text-muted divider">-------------------------------------</div>
+                    <div class="text-muted" style="margin: 1rem 0;">Loading saved license...</div>
+                    <div class="progress-bar"><div class="progress-fill"></div></div>
+                    <div class="text-green" style="margin-top: 2rem;">
+                        <span class="text-bold">✓</span> Authenticated as: <span class="text-purple">shadow_monarch</span>
+                    </div>
+                    <div style="margin-left: 1.5rem; margin-top: 0.5rem;">
+                        <div class="text-muted">Discord: SoloLeveling#1337</div>
+                        <div class="text-muted">Product: <span class="text-cyan">A-Solution Pro</span></div>
+                        <div class="text-muted">Status: <span class="text-green">Active</span></div>
+                    </div>
+                    <div class="text-cyan" style="margin-top: 2rem;">
+                        Checking for updates...
+                    </div>
+                    <div class="text-green" style="margin-top: 0.5rem;">
+                        ✓ You're on the latest version
+                    </div>
+                </div>
+            `,
+
+            module: `
+                <div class="screen-content fade-in">
+                    <div class="text-purple text-bold">Step 2:</div>
+                    <div class="text-bold">Choose Module</div>
+                    <div class="text-muted divider">-------------------------------------</div>
+                    <div style="margin-top: 1.5rem;">
+                        <div class="text-cyan">1.</div> Lazada
+                    </div>
+                    <div style="margin-top: 0.5rem;">
+                        <div class="text-cyan">2.</div> Shopee
+                    </div>
+                    <div style="margin-top: 0.5rem;">
+                        <div class="text-purple text-bold">3. Both (Lazada + Shopee)</div>
+                    </div>
+                    <div style="margin-top: 0.5rem;">
+                        <div class="text-muted">0. Exit</div>
+                    </div>
+                    <div style="margin-top: 2rem;">
+                        <span class="text-cyan">Enter your choice (0/1/2/3):</span> <span class="text-bold">3</span><span class="cursor"></span>
+                    </div>
+                </div>
+            `,
+
+            moduleSelected: `
+                <div class="screen-content fade-in">
+                    <div class="text-purple text-bold">Step 2:</div>
+                    <div class="text-bold">Choose Module</div>
+                    <div class="text-muted divider">-------------------------------------</div>
+                    <div class="text-green" style="margin-top: 2rem;">
+                        <span class="text-bold">✓</span> Selected: Both platforms
+                    </div>
+                    <div style="margin-top: 3rem;">
+                        <div class="text-purple text-bold">Step 4:</div>
+                        <div class="text-bold">Module Initialization</div>
+                        <div class="text-muted divider">-------------------------------------</div>
+                        <div class="text-green" style="margin-top: 1rem;">
+                            <span class="text-bold">✓</span> <span class="text-orange">[LAZADA]</span> module ready
+                        </div>
+                        <div class="text-green" style="margin-top: 0.5rem;">
+                            <span class="text-bold">✓</span> <span class="text-red">[SHOPEE]</span> module ready
+                        </div>
+                    </div>
+                </div>
+            `,
+
+            tasks: `
+                <div class="screen-content fade-in">
+                    <div class="text-purple text-bold">Step 6:</div>
+                    <div class="text-bold">Load Tasks</div>
+                    <div class="text-muted divider">-------------------------------------</div>
+                    <div class="text-green" style="margin-top: 2rem;">
+                        <span class="text-bold">✓</span> Loaded 3 Lazada task(s) from config/lazada/tasks.csv
+                    </div>
+                    <div class="text-green" style="margin-top: 0.5rem;">
+                        <span class="text-bold">✓</span> Loaded 2 Shopee task(s) from config/shopee/tasks.csv
+                    </div>
+                    <div class="text-cyan text-bold" style="margin-top: 2rem;">
+                        🚀 Total: 5 task(s) loaded
+                    </div>
+                </div>
+            `,
+
+            execution: `
+                <div class="screen-content fade-in">
+                    <div class="text-purple text-bold">Step 7:</div>
+                    <div class="text-bold">Task Execution</div>
+                    <div class="text-cyan divider">========================================</div>
+                    <div style="margin-top: 2rem;">
+                        <div class="text-cyan divider">========================================</div>
+                        <div class="text-purple">[Task 1] <span class="text-muted">Platform:</span> <span class="text-orange">[LAZADA]</span></div>
+                        <div class="text-cyan divider">========================================</div>
+                        <div class="text-green" style="margin-top: 1rem; margin-left: 1rem;">→ Login successful</div>
+                        <div class="text-green" style="margin-left: 1rem;">→ Product found!</div>
+                        <div class="text-green text-bold" style="margin-left: 1rem;">→ Checkout complete ✅</div>
+                    </div>
+                    <div style="margin-top: 2rem;">
+                        <div class="text-cyan divider">========================================</div>
+                        <div class="text-purple">[Task 2] <span class="text-muted">Platform:</span> <span class="text-red">[SHOPEE]</span></div>
+                        <div class="text-cyan divider">========================================</div>
+                        <div class="text-green" style="margin-top: 1rem; margin-left: 1rem;">→ Session validated</div>
+                        <div class="text-green" style="margin-left: 1rem;">→ Stock available!</div>
+                        <div class="text-green text-bold" style="margin-left: 1rem;">→ Order placed ✅</div>
+                    </div>
+                </div>
+            `,
+
+            complete: `
+                <div class="screen-content fade-in">
+                    <div class="text-cyan divider">========================================</div>
+                    <div class="text-green text-bold" style="text-align: center; margin: 2rem 0;">
+                        All tasks completed!
+                    </div>
+                    <div class="text-cyan divider">========================================</div>
+                    <div style="margin-top: 3rem; text-align: center;">
+                        <div class="text-purple text-bold" style="font-size: 1.2rem;">🎉 Success!</div>
+                        <div class="text-muted" style="margin-top: 1rem;">
+                            5 tasks completed successfully
+                        </div>
+                        <div class="text-cyan" style="margin-top: 2rem; font-size: 0.75rem;">
+                            Restarting demo in 3 seconds...
+                        </div>
+                    </div>
+                </div>
+            `
+        };
+
+        function showScreen(screenName) {
+            // Clear all screens
+            terminal.innerHTML = '';
+
+            // Create new screen
+            const screen = document.createElement('div');
+            screen.className = 'screen active';
+            screen.innerHTML = screens[screenName];
+            terminal.appendChild(screen);
+
+            currentScreen = screenName;
+        }
+
+        function runDemo() {
+            const sequence = [
+                { screen: 'banner', duration: 2000 },
+                { screen: 'auth', duration: 3500 },
+                { screen: 'module', duration: 2500 },
+                { screen: 'moduleSelected', duration: 2500 },
+                { screen: 'tasks', duration: 2500 },
+                { screen: 'execution', duration: 4000 },
+                { screen: 'complete', duration: 3000 },
+            ];
+
+            let totalDelay = 0;
+
+            sequence.forEach((step, index) => {
+                setTimeout(() => {
+                    showScreen(step.screen);
+
+                    // Restart after complete
+                    if (index === sequence.length - 1) {
+                        setTimeout(runDemo, step.duration);
+                    }
+                }, totalDelay);
+
+                totalDelay += step.duration;
+            });
+        }
+
+        // Start demo
+        runDemo();
+    </script>
+</body>
+</html>

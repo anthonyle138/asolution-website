@@ -54,7 +54,7 @@
     <!-- Main Content -->
     <main id="main-content" role="main">
 
-        <!-- Hero Section -->
+        <!-- Hero Section with CLI Demo -->
         <section class="hero" id="hero">
             <div class="hero-background">
                 <!-- Geometric shapes for decoration -->
@@ -63,38 +63,9 @@
                 <div class="geometric-shape shape-3" aria-hidden="true"></div>
             </div>
 
-            <div class="container hero-container">
-                <h1 class="hero-title animate-on-load">
-                    Dominate Every Checkout
-                </h1>
-                <p class="hero-subtitle animate-on-load">
-                    Rise to S-Rank shopper on <strong>Lazada & Shopee</strong> with lightning-fast automation, <br class="hide-mobile">captcha solving, and multi-region support
-                </p>
-                <div class="hero-cta animate-on-load">
-                    <a href="#pricing" class="btn btn-primary" aria-label="Get started with A's Solution">
-                        Get Started
-                    </a>
-                    <a href="#features" class="btn btn-secondary" aria-label="View features">
-                        View Features
-                    </a>
-                </div>
-
-                <!-- Scroll Indicator -->
-                <div class="scroll-indicator animate-bounce" aria-hidden="true">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <polyline points="6 9 12 15 18 9"></polyline>
-                    </svg>
-                </div>
-            </div>
-        </section>
-
-        <!-- Terminal Showcase Section -->
-        <section class="section terminal-section" id="terminal" aria-labelledby="terminal-heading">
-            <div class="container">
-                <h2 id="terminal-heading" class="section-title">See It In Action</h2>
-                <p class="section-description">Watch A's Solution automate checkouts on Lazada & Shopee</p>
-
-                <div class="terminal-window reveal-on-scroll">
+            <div class="container hero-container" style="max-width: 1100px;">
+                <!-- CLI Demo as Hero -->
+                <div class="terminal-window animate-on-load" style="margin-bottom: 2rem;">
                     <!-- Window Controls -->
                     <div class="window-controls">
                         <span class="control-btn control-close" aria-hidden="true"></span>
@@ -103,13 +74,40 @@
                         <span class="window-title">A's Solution - Terminal</span>
                     </div>
 
-                    <!-- Terminal Content -->
-                    <div class="terminal-content" role="region" aria-label="Terminal output demonstration">
-                        <div id="terminal-output" class="terminal-output">
-                            <!-- Terminal text will be typed here via JavaScript -->
-                        </div>
-                        <span class="terminal-cursor" aria-hidden="true">█</span>
+                    <!-- Terminal Content - Embedded CLI Demo -->
+                    <div class="terminal-content" role="region" aria-label="A-Solution CLI demonstration">
+                        <iframe
+                            src="cli-showcase-v2.html"
+                            style="width: 100%; height: 500px; border: none; background: transparent;"
+                            title="A-Solution CLI Demo"
+                            loading="eager">
+                        </iframe>
                     </div>
+                </div>
+
+                <!-- CTA Buttons -->
+                <div class="hero-cta animate-on-load">
+                    <a href="#pricing" class="btn btn-primary btn-pulse" aria-label="Get started with A's Solution">
+                        Get Started - $39.99/mo
+                    </a>
+                    <a href="cli-showcase-v2.html" class="btn btn-secondary" target="_blank" aria-label="View full CLI demo">
+                        Full Demo →
+                    </a>
+                    <a href="#features" class="btn btn-secondary" aria-label="View features">
+                        Features
+                    </a>
+                </div>
+
+                <!-- Tagline below -->
+                <p class="hero-subtitle animate-on-load" style="margin-top: 2rem; font-size: 16px;">
+                    Multi-platform automation for <strong>Lazada & Shopee</strong> • Lightning-fast checkouts • Auto captcha solving
+                </p>
+
+                <!-- Scroll Indicator -->
+                <div class="scroll-indicator animate-bounce" aria-hidden="true">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="6 9 12 15 18 9"></polyline>
+                    </svg>
                 </div>
             </div>
         </section>
@@ -348,10 +346,10 @@
                 <p class="section-description">One tier, unlimited power</p>
 
                 <div class="pricing-card reveal-on-scroll">
-                    <div class="pricing-badge">Shadow Tier</div>
+                    <div class="pricing-badge">Multi-Platform Bundle</div>
                     <div class="pricing-price">
                         <span class="price-currency">$</span>
-                        <span class="price-amount">69</span>
+                        <span class="price-amount">39.99</span>
                         <span class="price-period">/month</span>
                     </div>
 
@@ -360,7 +358,13 @@
                             <svg class="check-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" aria-hidden="true">
                                 <polyline points="20 6 9 17 4 12"></polyline>
                             </svg>
-                            <span>All Lazada regions (6 countries)</span>
+                            <span>Both Lazada + Shopee modules</span>
+                        </li>
+                        <li class="pricing-feature">
+                            <svg class="check-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" aria-hidden="true">
+                                <polyline points="20 6 9 17 4 12"></polyline>
+                            </svg>
+                            <span>All regions (Lazada: 6, Shopee: 8)</span>
                         </li>
                         <li class="pricing-feature">
                             <svg class="check-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" aria-hidden="true">
@@ -391,6 +395,12 @@
                                 <polyline points="20 6 9 17 4 12"></polyline>
                             </svg>
                             <span>Lifetime updates included</span>
+                        </li>
+                        <li class="pricing-feature">
+                            <svg class="check-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" aria-hidden="true">
+                                <polyline points="20 6 9 17 4 12"></polyline>
+                            </svg>
+                            <span>Concurrent multi-platform execution</span>
                         </li>
                     </ul>
 

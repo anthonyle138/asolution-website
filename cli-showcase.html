@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>A-SOLUTION CLI | Live Demo - Multi-Platform E-Commerce Automation</title>
+    <meta name="description" content="See A-Solution in action - Real-time CLI demo showcasing Lazada & Shopee automation with Whop auth, module selection, and concurrent task execution.">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Orbitron:wght@700;900&display=swap" rel="stylesheet">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+
+    <style>
+        :root {
+            --bg-dark: #0a0a0f;
+            --bg-terminal: #1a1a2e;
+            --purple: #8B5CF6;
+            --purple-bright: #A78BFA;
+            --cyan: #06B6D4;
+            --green: #10B981;
+            --orange: #F59E0B;
+            --red: #EF4444;
+            --text-primary: #E5E7EB;
+            --text-muted: #6B7280;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'JetBrains Mono', monospace;
+            background: linear-gradient(135deg, var(--bg-dark) 0%, var(--bg-terminal) 50%, var(--bg-dark) 100%);
+            color: var(--text-primary);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Background effects */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image:
+                radial-gradient(circle at 20% 50%, rgba(139, 92, 246, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(6, 182, 212, 0.1) 0%, transparent 50%);
+            animation: pulseGlow 8s ease-in-out infinite;
+            pointer-events: none;
+        }
+
+        body::after {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: repeating-linear-gradient(
+                0deg,
+                rgba(0, 0, 0, 0.15),
+                rgba(0, 0, 0, 0.15) 1px,
+                transparent 1px,
+                transparent 2px
+            );
+            pointer-events: none;
+            opacity: 0.5;
+        }
+
+        @keyframes pulseGlow {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 0.6; }
+        }
+
+        /* Header */
+        .header {
+            text-align: center;
+            margin-bottom: 2rem;
+            z-index: 10;
+        }
+
+        .logo-ascii {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, var(--purple), var(--cyan));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: 2px;
+            margin-bottom: 0.5rem;
+            animation: glow 3s ease-in-out infinite;
+        }
+
+        @keyframes glow {
+            0%, 100% { filter: drop-shadow(0 0 10px rgba(139, 92, 246, 0.5)); }
+            50% { filter: drop-shadow(0 0 20px rgba(139, 92, 246, 0.8)); }
+        }
+
+        .subtitle {
+            color: var(--text-muted);
+            font-size: 0.875rem;
+            margin-bottom: 1rem;
+        }
+
+        .platform-badges {
+            display: flex;
+            gap: 0.75rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            font-size: 0.75rem;
+            font-weight: 600;
+            backdrop-filter: blur(10px);
+        }
+
+        .badge-lazada {
+            background: rgba(15, 23, 102, 0.3);
+            border: 1px solid #0F1766;
+            color: #FF6600;
+        }
+
+        .badge-shopee {
+            background: rgba(238, 77, 45, 0.2);
+            border: 1px solid #EE4D2D;
+            color: #EE4D2D;
+        }
+
+        /* Terminal Container */
+        .terminal-container {
+            width: 100%;
+            max-width: 900px;
+            background: var(--bg-terminal);
+            border-radius: 12px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5),
+                        0 0 40px rgba(139, 92, 246, 0.2);
+            overflow: hidden;
+            z-index: 10;
+        }
+
+        /* Window Controls */
+        .window-header {
+            background: rgba(30, 30, 45, 0.9);
+            padding: 0.75rem 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            border-bottom: 1px solid rgba(139, 92, 246, 0.2);
+        }
+
+        .control-btn {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+
+        .control-close { background: #EF4444; }
+        .control-minimize { background: #F59E0B; }
+        .control-maximize { background: #10B981; }
+
+        .window-title {
+            margin-left: 1rem;
+            font-size: 0.875rem;
+            color: var(--text-muted);
+        }
+
+        /* Terminal Content */
+        .terminal-content {
+            padding: 1.5rem;
+            height: 500px;
+            overflow-y: auto;
+            font-size: 0.875rem;
+            line-height: 1.6;
+        }
+
+        .terminal-content::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .terminal-content::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.2);
+        }
+
+        .terminal-content::-webkit-scrollbar-thumb {
+            background: var(--purple);
+            border-radius: 4px;
+        }
+
+        .terminal-line {
+            margin-bottom: 0.25rem;
+            opacity: 0;
+            animation: fadeIn 0.3s forwards;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .cursor {
+            display: inline-block;
+            width: 8px;
+            height: 16px;
+            background: var(--purple-bright);
+            animation: blink 1s infinite;
+            margin-left: 4px;
+        }
+
+        @keyframes blink {
+            0%, 50% { opacity: 1; }
+            51%, 100% { opacity: 0; }
+        }
+
+        /* Text Colors */
+        .text-purple { color: var(--purple-bright); }
+        .text-cyan { color: var(--cyan); }
+        .text-green { color: var(--green); }
+        .text-orange { color: var(--orange); }
+        .text-red { color: var(--red); }
+        .text-muted { color: var(--text-muted); }
+        .text-bold { font-weight: 700; }
+
+        /* Progress Bar */
+        .progress-bar {
+            display: inline-block;
+            width: 200px;
+            height: 4px;
+            background: rgba(139, 92, 246, 0.2);
+            border-radius: 2px;
+            overflow: hidden;
+            margin: 0 0.5rem;
+            vertical-align: middle;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--purple), var(--cyan));
+            animation: progressFill 2s ease-in-out forwards;
+        }
+
+        @keyframes progressFill {
+            from { width: 0%; }
+            to { width: 100%; }
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            margin-top: 2rem;
+            z-index: 10;
+        }
+
+        .footer-link {
+            color: var(--purple-bright);
+            text-decoration: none;
+            font-size: 0.875rem;
+            transition: color 0.3s;
+        }
+
+        .footer-link:hover {
+            color: var(--cyan);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            body {
+                padding: 1rem;
+            }
+
+            .logo-ascii {
+                font-size: 1.5rem;
+            }
+
+            .terminal-content {
+                height: 400px;
+                font-size: 0.75rem;
+                padding: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <div class="header">
+        <div class="logo-ascii">A-SOLUTION</div>
+        <div class="subtitle">Multi-Platform E-Commerce Automation • Lazada + Shopee</div>
+        <div class="platform-badges">
+            <span class="badge badge-lazada">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="10"/></svg>
+                Lazada
+            </span>
+            <span class="badge badge-shopee">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="10"/></svg>
+                Shopee
+            </span>
+        </div>
+    </div>
+
+    <!-- Terminal -->
+    <div class="terminal-container">
+        <div class="window-header">
+            <span class="control-btn control-close"></span>
+            <span class="control-btn control-minimize"></span>
+            <span class="control-btn control-maximize"></span>
+            <span class="window-title">a-solution.exe</span>
+        </div>
+        <div class="terminal-content" id="terminal"></div>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+        <a href="index.html" class="footer-link">← Back to Main Site</a>
+    </div>
+
+    <script>
+        // Terminal Demo Script
+        const terminal = document.getElementById('terminal');
+        let lineDelay = 0;
+
+        const demoSequence = [
+            { delay: 500, text: '========================================', color: 'cyan' },
+            { delay: 100, text: '  A-Solution - E-com SEA Modules', color: 'purple bold' },
+            { delay: 100, text: '  Multi-Platform Bot (Lazada + Shopee)', color: 'purple' },
+            { delay: 100, text: '========================================', color: 'cyan' },
+            { delay: 300, text: '' },
+            { delay: 200, text: 'Step 1: Authentication', color: 'purple bold' },
+            { delay: 100, text: '-------------------------------------', color: 'muted' },
+            { delay: 300, text: 'Loading saved license...', color: '' },
+            { delay: 800, html: '<div class="progress-bar"><div class="progress-fill"></div></div>' },
+            { delay: 2200, text: '✅ Authenticated as: shadow_monarch', color: 'green' },
+            { delay: 100, text: '   Discord: SoloLeveling#1337', color: 'muted' },
+            { delay: 100, text: '   Product: A-Solution Pro', color: 'muted' },
+            { delay: 100, text: '   Status: Active', color: 'green' },
+            { delay: 500, text: '' },
+            { delay: 200, text: 'Checking for updates...', color: '' },
+            { delay: 800, text: '✓ You are on the latest version (v0.0.16)', color: 'green' },
+            { delay: 500, text: '' },
+            { delay: 200, text: 'Step 2: Choose Module', color: 'purple bold' },
+            { delay: 100, text: '-------------------------------------', color: 'muted' },
+            { delay: 100, text: '1. Lazada', color: '' },
+            { delay: 100, text: '2. Shopee', color: '' },
+            { delay: 100, text: '3. Both (Lazada + Shopee)', color: 'cyan' },
+            { delay: 100, text: '0. Exit', color: 'muted' },
+            { delay: 300, text: '' },
+            { delay: 500, text: 'Enter your choice (0/1/2/3): 3', color: 'orange' },
+            { delay: 300, text: '✓ Selected: Both platforms', color: 'green' },
+            { delay: 500, text: '' },
+            { delay: 200, text: 'Step 4: Module Initialization', color: 'purple bold' },
+            { delay: 100, text: '-------------------------------------', color: 'muted' },
+            { delay: 300, text: '✓ Lazada module ready', color: 'green' },
+            { delay: 300, text: '✓ Shopee module ready', color: 'green' },
+            { delay: 500, text: '' },
+            { delay: 200, text: 'Step 6: Load Tasks', color: 'purple bold' },
+            { delay: 100, text: '-------------------------------------', color: 'muted' },
+            { delay: 500, text: '✓ Loaded 3 Lazada task(s) from config/lazada/tasks.csv', color: 'green' },
+            { delay: 500, text: '✓ Loaded 2 Shopee task(s) from config/shopee/tasks.csv', color: 'green' },
+            { delay: 300, text: '🚀 Total: 5 task(s) loaded', color: 'cyan bold' },
+            { delay: 800, text: '' },
+            { delay: 200, text: 'Step 7: Task Execution', color: 'purple bold' },
+            { delay: 100, text: '========================================', color: 'cyan' },
+            { delay: 300, text: '' },
+            { delay: 500, text: '[Task 1] Platform: Lazada', color: 'orange bold' },
+            { delay: 300, text: '  → Login successful', color: 'green' },
+            { delay: 400, text: '  → Product found!', color: 'green' },
+            { delay: 500, text: '  → Checkout complete ✅', color: 'green bold' },
+            { delay: 400, text: '' },
+            { delay: 500, text: '[Task 2] Platform: Shopee', color: 'red bold' },
+            { delay: 300, text: '  → Session validated', color: 'green' },
+            { delay: 400, text: '  → Stock available!', color: 'green' },
+            { delay: 500, text: '  → Order placed ✅', color: 'green bold' },
+            { delay: 600, text: '' },
+            { delay: 200, text: '========================================', color: 'cyan' },
+            { delay: 100, text: '  All tasks completed!', color: 'green bold' },
+            { delay: 100, text: '========================================', color: 'cyan' },
+            { delay: 3000, text: '', action: 'restart' }
+        ];
+
+        function addLine(text, color = '', html = null) {
+            const line = document.createElement('div');
+            line.className = 'terminal-line';
+
+            if (html) {
+                line.innerHTML = html;
+            } else {
+                line.textContent = text;
+                if (color) {
+                    const classes = color.split(' ').map(c => 'text-' + c).join(' ');
+                    line.className += ' ' + classes;
+                }
+            }
+
+            terminal.appendChild(line);
+            terminal.scrollTop = terminal.scrollHeight;
+        }
+
+        function runDemo(startIndex = 0) {
+            if (startIndex === 0) {
+                terminal.innerHTML = '';
+            }
+
+            demoSequence.slice(startIndex).forEach((step, index) => {
+                setTimeout(() => {
+                    if (step.action === 'restart') {
+                        runDemo(0);
+                    } else {
+                        addLine(step.text || '', step.color || '', step.html);
+                    }
+                }, step.delay);
+            });
+        }
+
+        // Start demo on load
+        runDemo();
+    </script>
+</body>
+</html>
