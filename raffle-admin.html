@@ -148,7 +148,10 @@
                         <div class="winners-preview" id="winners-preview" style="display: none;">
                             <h3 class="preview-title">Winners</h3>
                             <div class="winners-grid" id="winners-grid"></div>
-                            <button type="button" class="btn btn-primary" onclick="publishResults()">Publish Results</button>
+                            <div style="display: flex; gap: 12px; margin-top: 20px;">
+                                <button type="button" class="btn btn-secondary" onclick="exportWinnersCSV()">📥 Export CSV</button>
+                                <button type="button" class="btn btn-primary" onclick="publishResults()">Publish Results</button>
+                            </div>
                         </div>
                     </div>
                 </div>

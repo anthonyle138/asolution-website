@@ -2,14 +2,42 @@
 // RAFFLE ADMIN LOGIC (WITH API)
 // ============================================
 
+// Admin password protection
+const ADMIN_PASSWORD = '20121981';
+
 // Initialize
 document.addEventListener('DOMContentLoaded', () => {
+    // Check password
+    if (!checkAdminPassword()) {
+        return;
+    }
+
     loadSettings();
     loadEntries();
     setupEventListeners();
     updateCurrentTime();
     setInterval(updateCurrentTime, 1000);
 });
+
+// Password Protection
+function checkAdminPassword() {
+    const savedPassword = sessionStorage.getItem('admin_password');
+
+    if (savedPassword === ADMIN_PASSWORD) {
+        return true;
+    }
+
+    const password = prompt('Enter Admin Password:');
+
+    if (password === ADMIN_PASSWORD) {
+        sessionStorage.setItem('admin_password', password);
+        return true;
+    } else {
+        alert('Incorrect password! Access denied.');
+        window.location.href = 'index.html';
+        return false;
+    }
+}
 
 // Event Listeners
 function setupEventListeners() {
@@ -434,6 +462,57 @@ function escapeHtml(text) {
         "'": '&#039;'
     };
     return text.replace(/[&<>"']/g, m => map[m]);
+}
+
+// ============================================
+// CSV EXPORT
+// ============================================
+
+async function exportWinnersCSV() {
+    try {
+        const response = await API.getWinners();
+        const winners = response.winners;
+
+        if (!winners || winners.length === 0) {
+            showNotification('No winners to export', 'error');
+            return;
+        }
+
+        // Create CSV content
+        const headers = ['Rank', 'Name', 'Email/Cookie', 'Phone', 'Entry Type', 'Drawn At'];
+        const rows = winners.map(winner => [
+            winner.winner_rank,
+            winner.name,
+            winner.email || '',
+            winner.phone || '',
+            winner.submitted_from || 'public',
+            winner.drawn_at || ''
+        ]);
+
+        // Convert to CSV format
+        const csvContent = [
+            headers.join(','),
+            ...rows.map(row => row.map(cell => `"${String(cell).replace(/"/g, '""')}"`).join(','))
+        ].join('\n');
+
+        // Create download link
+        const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+        const link = document.createElement('a');
+        const url = URL.createObjectURL(blob);
+
+        link.setAttribute('href', url);
+        link.setAttribute('download', `raffle_winners_${new Date().toISOString().split('T')[0]}.csv`);
+        link.style.visibility = 'hidden';
+
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+
+        showNotification('CSV exported successfully!', 'success');
+    } catch (error) {
+        console.error('Error exporting CSV:', error);
+        showNotification('Failed to export CSV', 'error');
+    }
 }
 
 // Add animations
