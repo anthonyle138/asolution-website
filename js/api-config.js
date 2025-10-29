@@ -3,7 +3,19 @@
 // ============================================
 
 // IMPORTANT: Update this to your server's API URL
+// NOTE: If you get "Failed to fetch" errors on HTTPS sites (like GitHub Pages),
+// you need to either:
+// 1. Set up HTTPS/SSL on your server (recommended - use Let's Encrypt)
+// 2. Use a CloudFlare proxy for HTTPS→HTTP
+// 3. Access the site via HTTP instead of HTTPS for testing
 const API_BASE_URL = 'http://128.199.133.218/api';  // Your lazada server
+
+// Detect Mixed Content issue
+if (typeof window !== 'undefined' && window.location.protocol === 'https:' && API_BASE_URL.startsWith('http:')) {
+    console.warn('⚠️ MIXED CONTENT WARNING: HTTPS page trying to access HTTP API');
+    console.warn('This will be blocked by browsers for security reasons.');
+    console.warn('Solution: Set up HTTPS on your API server or use a proxy.');
+}
 
 const API_ENDPOINTS = {
     SETTINGS: `${API_BASE_URL}/settings.php`,
