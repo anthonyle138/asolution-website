@@ -1,11 +1,6 @@
 // ============================================
-// RAFFLE ENTRIES PAGE - PARTICIPANT SUBMISSION
+// RAFFLE ENTRIES PAGE - PARTICIPANT SUBMISSION (WITH API)
 // ============================================
-
-const STORAGE_KEYS = {
-    SETTINGS: 'raffle_settings',
-    ENTRIES: 'raffle_entries'
-};
 
 let currentEntryMode = 'normal'; // 'normal' or 'cookie'
 
@@ -24,45 +19,46 @@ function setupEventListeners() {
 // LOAD RAFFLE INFO
 // ============================================
 
-function loadRaffleInfo() {
-    const settings = getSettings();
+async function loadRaffleInfo() {
+    try {
+        const settings = await API.getSettings();
 
-    if (!settings) {
-        showClosedMessage('Raffle has not been set up yet. Please check back later.');
-        return;
-    }
+        if (!settings) {
+            showClosedMessage('Raffle has not been set up yet. Please check back later.');
+            return;
+        }
 
-    // Update page title and description
-    document.getElementById('raffle-title').textContent = settings.title || 'Enter Raffle';
-    document.getElementById('raffle-description').textContent = 'Fill out the form below to enter';
+        // Update page title and description
+        document.getElementById('raffle-title').textContent = settings.title || 'Enter Raffle';
+        document.getElementById('raffle-description').textContent = 'Fill out the form below to enter';
 
-    // Update info display
-    const startTime = new Date(settings.startTime);
-    const endTime = new Date(settings.endTime);
+        // Update info display
+        const startTime = new Date(settings.start_time);
+        const endTime = new Date(settings.end_time);
 
-    document.getElementById('start-time-display').textContent = startTime.toLocaleString();
-    document.getElementById('end-time-display').textContent = endTime.toLocaleString();
-    document.getElementById('winner-count-display').textContent = settings.winnerCount;
+        document.getElementById('start-time-display').textContent = startTime.toLocaleString();
+        document.getElementById('end-time-display').textContent = endTime.toLocaleString();
+        document.getElementById('winner-count-display').textContent = settings.winner_count;
 
-    // Check raffle status
-    const now = new Date();
-    let status = '';
-    let canEnter = false;
+        // Check raffle status
+        const now = new Date();
+        let canEnter = false;
 
-    if (now < startTime) {
-        status = 'not-started';
-        showClosedMessage(`Raffle starts on ${startTime.toLocaleString()}`);
-    } else if (now >= startTime && now < endTime) {
-        status = 'active';
-        canEnter = true;
-        updateStatusBadge('Active', 'active');
-    } else {
-        status = 'ended';
-        showClosedMessage(`Raffle ended on ${endTime.toLocaleString()}`);
-    }
+        if (now < startTime) {
+            showClosedMessage(`Raffle starts on ${startTime.toLocaleString()}`);
+        } else if (now >= startTime && now < endTime) {
+            canEnter = true;
+            updateStatusBadge('Active', 'active');
+        } else {
+            showClosedMessage(`Raffle ended on ${endTime.toLocaleString()}`);
+        }
 
-    if (!canEnter) {
-        document.getElementById('entry-form-card').style.display = 'none';
+        if (!canEnter) {
+            document.getElementById('entry-form-card').style.display = 'none';
+        }
+    } catch (error) {
+        console.error('Error loading raffle info:', error);
+        showClosedMessage('Error loading raffle information. Please try again later.');
     }
 }
 
@@ -116,7 +112,7 @@ function switchEntryMode(mode) {
 // ENTRY SUBMISSION
 // ============================================
 
-function submitEntry(e) {
+async function submitEntry(e) {
     e.preventDefault();
 
     const name = document.getElementById('participant-name').value.trim();
@@ -146,37 +142,45 @@ function submitEntry(e) {
         return;
     }
 
-    // Check for duplicate
-    const entries = getEntries();
-    const duplicate = entries.find(entry => entry.email === email);
+    try {
+        // Disable submit button
+        const submitBtn = document.getElementById('submit-button');
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'Submitting...';
 
-    if (duplicate) {
-        showNotification(currentEntryMode === 'cookie' ? 'This cookie has already been entered in the raffle' : 'This email has already been entered in the raffle', 'error');
-        return;
+        // Create entry via API
+        const entry = {
+            name,
+            email, // For cookie mode, this contains the cookie
+            phone: phone || null,
+            submitted_from: currentEntryMode === 'cookie' ? 'cookie' : 'public'
+        };
+
+        const result = await API.addEntry(entry);
+
+        // Show success
+        if (currentEntryMode === 'cookie') {
+            showSuccess('your cookie submission');
+        } else {
+            showSuccess(email);
+        }
+        showNotification('Entry submitted successfully!', 'success');
+
+    } catch (error) {
+        console.error('Error submitting entry:', error);
+
+        // Re-enable submit button
+        const submitBtn = document.getElementById('submit-button');
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Submit Entry';
+
+        // Show error message
+        let errorMessage = 'Failed to submit entry. Please try again.';
+        if (error.message) {
+            errorMessage = error.message;
+        }
+        showNotification(errorMessage, 'error');
     }
-
-    // Create entry
-    const entry = {
-        id: Date.now(),
-        name,
-        email, // For cookie mode, this contains the cookie
-        phone,
-        timestamp: new Date().toISOString(),
-        submittedFrom: currentEntryMode === 'cookie' ? 'cookie' : 'public',
-        isCookieEntry: currentEntryMode === 'cookie'
-    };
-
-    // Save entry
-    entries.push(entry);
-    saveEntries(entries);
-
-    // Show success
-    if (currentEntryMode === 'cookie') {
-        showSuccess('your cookie submission');
-    } else {
-        showSuccess(email);
-    }
-    showNotification('Entry submitted successfully!', 'success');
 }
 
 function showSuccess(email) {
@@ -196,29 +200,16 @@ function submitAnother() {
     document.getElementById('success-card').style.display = 'none';
     document.getElementById('entry-form').reset();
 
+    // Re-enable submit button
+    const submitBtn = document.getElementById('submit-button');
+    submitBtn.disabled = false;
+    submitBtn.textContent = 'Submit Entry';
+
     // Scroll to form
     document.getElementById('entry-form-card').scrollIntoView({
         behavior: 'smooth',
         block: 'start'
     });
-}
-
-// ============================================
-// DATA MANAGEMENT
-// ============================================
-
-function getSettings() {
-    const data = localStorage.getItem(STORAGE_KEYS.SETTINGS);
-    return data ? JSON.parse(data) : null;
-}
-
-function getEntries() {
-    const data = localStorage.getItem(STORAGE_KEYS.ENTRIES);
-    return data ? JSON.parse(data) : [];
-}
-
-function saveEntries(entries) {
-    localStorage.setItem(STORAGE_KEYS.ENTRIES, JSON.stringify(entries));
 }
 
 // ============================================
