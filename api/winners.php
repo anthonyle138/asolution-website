@@ -13,7 +13,7 @@ if ($method === 'GET') {
     try {
         $publishedOnly = isset($_GET['published']) && $_GET['published'] === 'true';
 
-        $sql = "SELECT w.*, e.name, e.email, e.phone
+        $sql = "SELECT w.*, e.name, e.email, e.phone, e.submitted_from
                 FROM raffle_winners w
                 INNER JOIN raffle_entries e ON w.entry_id = e.id";
 
@@ -97,7 +97,7 @@ elseif ($method === 'POST') {
             }
 
             // Fetch the drawn winners with entry details
-            $stmt = $db->query("SELECT w.*, e.name, e.email, e.phone
+            $stmt = $db->query("SELECT w.*, e.name, e.email, e.phone, e.submitted_from
                                FROM raffle_winners w
                                INNER JOIN raffle_entries e ON w.entry_id = e.id
                                WHERE w.published = 0
@@ -124,7 +124,7 @@ elseif ($method === 'POST') {
             }
 
             // Fetch published winners
-            $stmt = $db->query("SELECT w.*, e.name, e.email, e.phone
+            $stmt = $db->query("SELECT w.*, e.name, e.email, e.phone, e.submitted_from
                                FROM raffle_winners w
                                INNER JOIN raffle_entries e ON w.entry_id = e.id
                                WHERE w.published = 1

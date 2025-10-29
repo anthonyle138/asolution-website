@@ -56,11 +56,16 @@ function displayWinners(winners) {
 
     container.innerHTML = winners.map((winner, index) => {
         const emoji = rankEmojis[index] || '🏅';
+
+        // Only show email if it's from 'public' or 'admin' entries
+        // Hide cookies (submitted_from='cookie') for privacy
+        const showEmail = winner.email && winner.submitted_from !== 'cookie';
+
         return `
             <div class="winner-card animate-in" style="animation-delay: ${index * 0.1}s">
                 <div class="winner-rank">${emoji}</div>
                 <div class="winner-name">${escapeHtml(winner.name)}</div>
-                ${winner.email ? `<div class="winner-email">${escapeHtml(winner.email)}</div>` : ''}
+                ${showEmail ? `<div class="winner-email">${escapeHtml(winner.email)}</div>` : ''}
                 <div style="margin-top: 12px; font-size: 0.875rem; color: var(--color-text-secondary); font-family: var(--font-mono);">
                     Rank #${winner.winner_rank}
                 </div>
