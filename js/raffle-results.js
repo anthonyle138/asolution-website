@@ -1,12 +1,6 @@
 // ============================================
-// RAFFLE RESULTS DISPLAY
+// RAFFLE RESULTS DISPLAY (WITH API)
 // ============================================
-
-const STORAGE_KEYS = {
-    SETTINGS: 'raffle_settings',
-    ENTRIES: 'raffle_entries',
-    WINNERS: 'raffle_winners'
-};
 
 // Initialize
 document.addEventListener('DOMContentLoaded', () => {
@@ -17,29 +11,42 @@ document.addEventListener('DOMContentLoaded', () => {
 // LOAD AND DISPLAY RESULTS
 // ============================================
 
-function loadResults() {
-    const settings = getSettings();
-    const entries = getEntries();
-    const winners = getWinners();
+async function loadResults() {
+    try {
+        const response = await API.getWinners(true); // Get only published winners
 
-    if (!winners || winners.length === 0) {
+        if (!response.winners || response.winners.length === 0) {
+            showNoResults();
+            return;
+        }
+
+        const winners = response.winners;
+        const drawInfo = response.draw_info;
+
+        // Update raffle info
+        const settings = await API.getSettings();
+        if (settings) {
+            document.getElementById('raffle-title').textContent = settings.title || 'Raffle Results';
+            if (winners[0].drawn_at) {
+                document.getElementById('raffle-description').textContent = `Winners drawn on ${new Date(winners[0].drawn_at).toLocaleDateString()}`;
+            }
+        }
+
+        // Update stats
+        if (drawInfo) {
+            document.getElementById('total-entries').textContent = drawInfo.total_entries || 0;
+            document.getElementById('winner-count').textContent = drawInfo.winner_count || winners.length;
+            if (drawInfo.drawn_at) {
+                document.getElementById('draw-date').textContent = new Date(drawInfo.drawn_at).toLocaleString();
+            }
+        }
+
+        // Display winners
+        displayWinners(winners);
+    } catch (error) {
+        console.error('Error loading results:', error);
         showNoResults();
-        return;
     }
-
-    // Update raffle info
-    if (settings) {
-        document.getElementById('raffle-title').textContent = settings.title || 'Raffle Results';
-        document.getElementById('raffle-description').textContent = `Winners drawn on ${new Date(winners[0].drawnAt).toLocaleDateString()}`;
-    }
-
-    // Update stats
-    document.getElementById('total-entries').textContent = entries.length;
-    document.getElementById('winner-count').textContent = winners.length;
-    document.getElementById('draw-date').textContent = new Date(winners[0].drawnAt).toLocaleString();
-
-    // Display winners
-    displayWinners(winners);
 }
 
 function displayWinners(winners) {
@@ -55,7 +62,7 @@ function displayWinners(winners) {
                 <div class="winner-name">${escapeHtml(winner.name)}</div>
                 ${winner.email ? `<div class="winner-email">${escapeHtml(winner.email)}</div>` : ''}
                 <div style="margin-top: 12px; font-size: 0.875rem; color: var(--color-text-secondary); font-family: var(--font-mono);">
-                    Rank #${winner.rank}
+                    Rank #${winner.winner_rank}
                 </div>
             </div>
         `;
@@ -70,25 +77,6 @@ function showNoResults() {
 
     // Hide raffle info
     document.querySelector('.raffle-info-card').style.display = 'none';
-}
-
-// ============================================
-// DATA RETRIEVAL
-// ============================================
-
-function getSettings() {
-    const data = localStorage.getItem(STORAGE_KEYS.SETTINGS);
-    return data ? JSON.parse(data) : null;
-}
-
-function getEntries() {
-    const data = localStorage.getItem(STORAGE_KEYS.ENTRIES);
-    return data ? JSON.parse(data) : [];
-}
-
-function getWinners() {
-    const data = localStorage.getItem(STORAGE_KEYS.WINNERS);
-    return data ? JSON.parse(data) : null;
 }
 
 // ============================================

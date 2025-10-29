@@ -1,13 +1,6 @@
 // ============================================
-// RAFFLE ADMIN LOGIC
+// RAFFLE ADMIN LOGIC (WITH API)
 // ============================================
-
-// Storage keys
-const STORAGE_KEYS = {
-    SETTINGS: 'raffle_settings',
-    ENTRIES: 'raffle_entries',
-    WINNERS: 'raffle_winners'
-};
 
 // Initialize
 document.addEventListener('DOMContentLoaded', () => {
@@ -28,43 +21,52 @@ function setupEventListeners() {
 // SETTINGS MANAGEMENT
 // ============================================
 
-function loadSettings() {
-    const settings = getSettings();
+async function loadSettings() {
+    try {
+        const settings = await API.getSettings();
 
-    if (settings) {
-        document.getElementById('raffle-title').value = settings.title || '';
-        document.getElementById('start-time').value = settings.startTime || '';
-        document.getElementById('end-time').value = settings.endTime || '';
-        document.getElementById('winner-count').value = settings.winnerCount || 1;
+        if (settings) {
+            document.getElementById('raffle-title').value = settings.title || '';
+            document.getElementById('start-time').value = settings.start_time ? settings.start_time.slice(0, 16) : '';
+            document.getElementById('end-time').value = settings.end_time ? settings.end_time.slice(0, 16) : '';
+            document.getElementById('winner-count').value = settings.winner_count || 1;
 
-        updateRaffleStatus(settings);
+            updateRaffleStatus(settings);
+        }
+    } catch (error) {
+        console.error('Error loading settings:', error);
     }
 }
 
-function saveSettings(e) {
+async function saveSettings(e) {
     e.preventDefault();
 
-    const settings = {
-        title: document.getElementById('raffle-title').value,
-        startTime: document.getElementById('start-time').value,
-        endTime: document.getElementById('end-time').value,
-        winnerCount: parseInt(document.getElementById('winner-count').value)
-    };
+    const title = document.getElementById('raffle-title').value;
+    const startTime = document.getElementById('start-time').value;
+    const endTime = document.getElementById('end-time').value;
+    const winnerCount = parseInt(document.getElementById('winner-count').value);
 
-    localStorage.setItem(STORAGE_KEYS.SETTINGS, JSON.stringify(settings));
-    updateRaffleStatus(settings);
-    showNotification('Settings saved successfully!', 'success');
+    try {
+        const settings = {
+            title,
+            start_time: new Date(startTime).toISOString(),
+            end_time: new Date(endTime).toISOString(),
+            winner_count: winnerCount
+        };
+
+        await API.saveSettings(settings);
+        updateRaffleStatus(settings);
+        showNotification('Settings saved successfully!', 'success');
+    } catch (error) {
+        console.error('Error saving settings:', error);
+        showNotification('Failed to save settings', 'error');
+    }
 }
 
-function getSettings() {
-    const data = localStorage.getItem(STORAGE_KEYS.SETTINGS);
-    return data ? JSON.parse(data) : null;
-}
-
-function updateRaffleStatus(settings) {
+async function updateRaffleStatus(settings) {
     const now = new Date();
-    const startTime = new Date(settings.startTime);
-    const endTime = new Date(settings.endTime);
+    const startTime = new Date(settings.start_time);
+    const endTime = new Date(settings.end_time);
     const statusBadge = document.getElementById('raffle-status');
     const drawButton = document.getElementById('draw-button');
     const drawStatus = document.getElementById('draw-status');
@@ -94,12 +96,22 @@ function updateRaffleStatus(settings) {
     }
 
     // Check if already drawn
-    const winners = getWinners();
-    if (winners && winners.length > 0) {
-        status = 'drawn';
-        statusText = 'Winners Drawn';
-        canDraw = false;
-        drawStatus.textContent = 'Winners already selected';
+    try {
+        const response = await API.getWinners();
+        if (response.winners && response.winners.length > 0) {
+            // Check if published
+            const hasPublished = response.winners.some(w => w.published === 1);
+            if (hasPublished) {
+                status = 'drawn';
+                statusText = 'Winners Drawn';
+                canDraw = false;
+                drawStatus.textContent = 'Winners already published';
+            } else {
+                drawStatus.textContent = 'Winners drawn but not published';
+            }
+        }
+    } catch (error) {
+        console.error('Error checking winners:', error);
     }
 
     // Update UI
@@ -112,22 +124,19 @@ function updateRaffleStatus(settings) {
 // ENTRIES MANAGEMENT
 // ============================================
 
-function loadEntries() {
-    const entries = getEntries();
-    renderEntries(entries);
-    updateEntryCount(entries.length);
+async function loadEntries() {
+    try {
+        const entries = await API.getEntries();
+        renderEntries(entries);
+        updateEntryCount(entries.length);
+    } catch (error) {
+        console.error('Error loading entries:', error);
+        renderEntries([]);
+        updateEntryCount(0);
+    }
 }
 
-function getEntries() {
-    const data = localStorage.getItem(STORAGE_KEYS.ENTRIES);
-    return data ? JSON.parse(data) : [];
-}
-
-function saveEntries(entries) {
-    localStorage.setItem(STORAGE_KEYS.ENTRIES, JSON.stringify(entries));
-}
-
-function addEntry(e) {
+async function addEntry(e) {
     e.preventDefault();
 
     const name = document.getElementById('entry-name').value.trim();
@@ -138,33 +147,41 @@ function addEntry(e) {
         return;
     }
 
-    const entries = getEntries();
-    entries.push({
-        id: Date.now(),
-        name,
-        email,
-        timestamp: new Date().toISOString()
-    });
+    try {
+        const entry = {
+            name,
+            email: email || null,
+            phone: null,
+            submitted_from: 'admin'
+        };
 
-    saveEntries(entries);
-    renderEntries(entries);
-    updateEntryCount(entries.length);
+        await API.addEntry(entry);
 
-    // Clear form
-    document.getElementById('add-entry-form').reset();
-    showNotification('Entry added successfully!', 'success');
+        // Reload entries
+        await loadEntries();
+
+        // Clear form
+        document.getElementById('add-entry-form').reset();
+        showNotification('Entry added successfully!', 'success');
+    } catch (error) {
+        console.error('Error adding entry:', error);
+        showNotification(error.message || 'Failed to add entry', 'error');
+    }
 }
 
-function removeEntry(id) {
+async function removeEntry(id) {
     if (!confirm('Are you sure you want to remove this entry?')) {
         return;
     }
 
-    const entries = getEntries().filter(entry => entry.id !== id);
-    saveEntries(entries);
-    renderEntries(entries);
-    updateEntryCount(entries.length);
-    showNotification('Entry removed', 'success');
+    try {
+        await API.deleteEntry(id);
+        await loadEntries();
+        showNotification('Entry removed', 'success');
+    } catch (error) {
+        console.error('Error removing entry:', error);
+        showNotification('Failed to remove entry', 'error');
+    }
 }
 
 function renderEntries(entries) {
@@ -180,6 +197,7 @@ function renderEntries(entries) {
             <div class="entry-info">
                 <div class="entry-name">${escapeHtml(entry.name)}</div>
                 ${entry.email ? `<div class="entry-email">${escapeHtml(entry.email)}</div>` : ''}
+                ${entry.submitted_from ? `<span class="entry-badge">${entry.submitted_from}</span>` : ''}
             </div>
             <div class="entry-actions">
                 <button class="btn-icon" onclick="removeEntry(${entry.id})" title="Remove">
@@ -198,7 +216,7 @@ function updateEntryCount(count) {
 // BULK IMPORT
 // ============================================
 
-function importBulkEntries() {
+async function importBulkEntries() {
     const textarea = document.getElementById('bulk-entries');
     const text = textarea.value.trim();
 
@@ -208,8 +226,7 @@ function importBulkEntries() {
     }
 
     const lines = text.split('\n').filter(line => line.trim());
-    const entries = getEntries();
-    let imported = 0;
+    const entries = [];
 
     lines.forEach(line => {
         const parts = line.split(',').map(p => p.trim());
@@ -218,55 +235,65 @@ function importBulkEntries() {
 
         if (name) {
             entries.push({
-                id: Date.now() + imported,
                 name,
-                email,
-                timestamp: new Date().toISOString()
+                email: email || null,
+                phone: null
             });
-            imported++;
         }
     });
 
-    saveEntries(entries);
-    renderEntries(entries);
-    updateEntryCount(entries.length);
-    textarea.value = '';
-    showNotification(`Imported ${imported} ${imported === 1 ? 'entry' : 'entries'}!`, 'success');
+    if (entries.length === 0) {
+        showNotification('No valid entries found', 'error');
+        return;
+    }
+
+    try {
+        await API.bulkImport(entries);
+        await loadEntries();
+        textarea.value = '';
+        showNotification(`Imported ${entries.length} ${entries.length === 1 ? 'entry' : 'entries'}!`, 'success');
+    } catch (error) {
+        console.error('Error importing entries:', error);
+        showNotification('Failed to import entries', 'error');
+    }
 }
 
 // ============================================
 // DRAW WINNERS
 // ============================================
 
-function drawWinners() {
-    const settings = getSettings();
-    const entries = getEntries();
+async function drawWinners() {
+    try {
+        const settings = await API.getSettings();
+        const entries = await API.getEntries();
 
-    if (!settings) {
-        showNotification('Please save raffle settings first', 'error');
-        return;
+        if (!settings) {
+            showNotification('Please save raffle settings first', 'error');
+            return;
+        }
+
+        if (entries.length === 0) {
+            showNotification('No entries to draw from', 'error');
+            return;
+        }
+
+        if (entries.length < settings.winner_count) {
+            showNotification(`Not enough entries. Need at least ${settings.winner_count} entries.`, 'error');
+            return;
+        }
+
+        // Call API to draw winners
+        const response = await API.drawWinners();
+
+        if (response.winners) {
+            displayWinnersPreview(response.winners);
+        } else {
+            showNotification('Failed to draw winners', 'error');
+        }
+    } catch (error) {
+        console.error('Error drawing winners:', error);
+        showNotification(error.message || 'Failed to draw winners', 'error');
     }
-
-    if (entries.length === 0) {
-        showNotification('No entries to draw from', 'error');
-        return;
-    }
-
-    if (entries.length < settings.winnerCount) {
-        showNotification(`Not enough entries. Need at least ${settings.winnerCount} entries.`, 'error');
-        return;
-    }
-
-    // Shuffle and select winners
-    const shuffled = [...entries].sort(() => Math.random() - 0.5);
-    const winners = shuffled.slice(0, settings.winnerCount).map((entry, index) => ({
-        ...entry,
-        rank: index + 1,
-        drawnAt: new Date().toISOString()
-    }));
-
-    // Show winners preview
-    displayWinnersPreview(winners);
 }
 
 function displayWinnersPreview(winners) {
@@ -285,52 +312,37 @@ function displayWinnersPreview(winners) {
 
     preview.style.display = 'block';
 
-    // Temporarily store winners
-    sessionStorage.setItem('temp_winners', JSON.stringify(winners));
-
     showNotification('Winners selected! Review and publish.', 'success');
 }
 
-function publishResults() {
-    const tempWinners = sessionStorage.getItem('temp_winners');
-
-    if (!tempWinners) {
-        showNotification('No winners to publish', 'error');
-        return;
-    }
-
+async function publishResults() {
     if (!confirm('Are you sure you want to publish these results? This cannot be undone.')) {
         return;
     }
 
-    const winners = JSON.parse(tempWinners);
-    localStorage.setItem(STORAGE_KEYS.WINNERS, JSON.stringify(winners));
-    sessionStorage.removeItem('temp_winners');
+    try {
+        const response = await API.publishWinners();
 
-    // Update status
-    const settings = getSettings();
-    if (settings) {
-        updateRaffleStatus(settings);
+        showNotification('Results published successfully!', 'success');
+
+        // Reload settings to update status
+        await loadSettings();
+
+        // Redirect to results page
+        setTimeout(() => {
+            window.location.href = 'raffle-results.html';
+        }, 1500);
+    } catch (error) {
+        console.error('Error publishing winners:', error);
+        showNotification(error.message || 'Failed to publish winners', 'error');
     }
-
-    showNotification('Results published successfully!', 'success');
-
-    // Redirect to results page
-    setTimeout(() => {
-        window.location.href = 'raffle-results.html';
-    }, 1500);
-}
-
-function getWinners() {
-    const data = localStorage.getItem(STORAGE_KEYS.WINNERS);
-    return data ? JSON.parse(data) : null;
 }
 
 // ============================================
 // DANGER ZONE
 // ============================================
 
-function clearAllEntries() {
+async function clearAllEntries() {
     if (!confirm('Are you sure you want to delete ALL entries? This cannot be undone.')) {
         return;
     }
@@ -339,13 +351,17 @@ function clearAllEntries() {
         return;
     }
 
-    localStorage.removeItem(STORAGE_KEYS.ENTRIES);
-    renderEntries([]);
-    updateEntryCount(0);
-    showNotification('All entries cleared', 'success');
+    try {
+        await API.clearAllEntries();
+        await loadEntries();
+        showNotification('All entries cleared', 'success');
+    } catch (error) {
+        console.error('Error clearing entries:', error);
+        showNotification('Failed to clear entries', 'error');
+    }
 }
 
-function resetRaffle() {
+async function resetRaffle() {
     if (!confirm('This will reset the entire raffle (settings, entries, and winners). Are you sure?')) {
         return;
     }
@@ -354,16 +370,20 @@ function resetRaffle() {
         return;
     }
 
-    localStorage.removeItem(STORAGE_KEYS.SETTINGS);
-    localStorage.removeItem(STORAGE_KEYS.ENTRIES);
-    localStorage.removeItem(STORAGE_KEYS.WINNERS);
-    sessionStorage.removeItem('temp_winners');
+    try {
+        // Clear all data via API
+        await API.clearAllEntries();
+        await API.clearWinners();
 
-    showNotification('Raffle reset successfully', 'success');
+        showNotification('Raffle reset successfully', 'success');
 
-    setTimeout(() => {
-        location.reload();
-    }, 1000);
+        setTimeout(() => {
+            location.reload();
+        }, 1000);
+    } catch (error) {
+        console.error('Error resetting raffle:', error);
+        showNotification('Failed to reset raffle', 'error');
+    }
 }
 
 // ============================================
