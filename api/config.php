@@ -6,8 +6,8 @@
 // IMPORTANT: Update these values for your server
 define('DB_HOST', 'localhost');
 define('DB_NAME', 'asolution_raffle');
-define('DB_USER', 'root');  // Update if you create a dedicated user
-define('DB_PASS', '');  // Add your MySQL root password here
+define('DB_USER', 'raffle_user');
+define('DB_PASS', 'raffle2024');
 
 // Timezone
 date_default_timezone_set('UTC');

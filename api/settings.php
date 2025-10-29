@@ -59,9 +59,11 @@ elseif ($method === 'POST') {
         $end_time = sanitizeInput($data['end_time']);
         $winner_count = (int)$data['winner_count'];
 
-        // Validate dates
+        // Validate dates and convert to MySQL format
         $start = new DateTime($start_time);
         $end = new DateTime($end_time);
+        $start_time_mysql = $start->format('Y-m-d H:i:s');
+        $end_time_mysql = $end->format('Y-m-d H:i:s');
         $now = new DateTime();
 
         if ($end <= $start) {
@@ -83,12 +85,12 @@ elseif ($method === 'POST') {
         if ($existing) {
             // Update existing settings
             $stmt = $db->prepare("UPDATE raffle_settings SET title = ?, start_time = ?, end_time = ?, winner_count = ?, status = ?, updated_at = NOW() WHERE id = ?");
-            $stmt->execute([$title, $start_time, $end_time, $winner_count, $status, $existing['id']]);
+            $stmt->execute([$title, $start_time_mysql, $end_time_mysql, $winner_count, $status, $existing['id']]);
             $id = $existing['id'];
         } else {
             // Insert new settings
             $stmt = $db->prepare("INSERT INTO raffle_settings (title, start_time, end_time, winner_count, status) VALUES (?, ?, ?, ?, ?)");
-            $stmt->execute([$title, $start_time, $end_time, $winner_count, $status]);
+            $stmt->execute([$title, $start_time_mysql, $end_time_mysql, $winner_count, $status]);
             $id = $db->lastInsertId();
         }
 
