@@ -21,7 +21,7 @@ if ($method === 'GET') {
             $sql .= " WHERE w.published = 1";
         }
 
-        $sql .= " ORDER BY w.rank ASC";
+        $sql .= " ORDER BY w.winner_rank ASC";
 
         $stmt = $db->query($sql);
         $winners = $stmt->fetchAll();
@@ -89,7 +89,7 @@ elseif ($method === 'POST') {
             $db->exec("DELETE FROM raffle_winners WHERE published = 0");
 
             // Insert new winners (unpublished)
-            $stmt = $db->prepare("INSERT INTO raffle_winners (entry_id, rank, published) VALUES (?, ?, 0)");
+            $stmt = $db->prepare("INSERT INTO raffle_winners (entry_id, winner_rank, published) VALUES (?, ?, 0)");
 
             foreach ($selectedEntries as $index => $entry) {
                 $rank = $index + 1;
@@ -101,7 +101,7 @@ elseif ($method === 'POST') {
                                FROM raffle_winners w
                                INNER JOIN raffle_entries e ON w.entry_id = e.id
                                WHERE w.published = 0
-                               ORDER BY w.rank ASC");
+                               ORDER BY w.winner_rank ASC");
             $winners = $stmt->fetchAll();
 
             sendJSON([
@@ -128,7 +128,7 @@ elseif ($method === 'POST') {
                                FROM raffle_winners w
                                INNER JOIN raffle_entries e ON w.entry_id = e.id
                                WHERE w.published = 1
-                               ORDER BY w.rank ASC");
+                               ORDER BY w.winner_rank ASC");
             $winners = $stmt->fetchAll();
 
             sendJSON([

@@ -7,6 +7,8 @@ const STORAGE_KEYS = {
     ENTRIES: 'raffle_entries'
 };
 
+let currentEntryMode = 'normal'; // 'normal' or 'cookie'
+
 // Initialize
 document.addEventListener('DOMContentLoaded', () => {
     loadRaffleInfo();
@@ -77,6 +79,40 @@ function showClosedMessage(message) {
 }
 
 // ============================================
+// ENTRY MODE SWITCHING
+// ============================================
+
+function switchEntryMode(mode) {
+    currentEntryMode = mode;
+
+    // Update button states
+    document.querySelectorAll('.mode-btn').forEach(btn => {
+        btn.classList.remove('active');
+        if (btn.dataset.mode === mode) {
+            btn.classList.add('active');
+        }
+    });
+
+    // Toggle field visibility
+    const emailGroup = document.getElementById('email-group');
+    const cookieGroup = document.getElementById('cookie-group');
+    const emailInput = document.getElementById('participant-email');
+    const cookieInput = document.getElementById('participant-cookie');
+
+    if (mode === 'cookie') {
+        emailGroup.style.display = 'none';
+        cookieGroup.style.display = 'block';
+        emailInput.required = false;
+        cookieInput.required = true;
+    } else {
+        emailGroup.style.display = 'block';
+        cookieGroup.style.display = 'none';
+        emailInput.required = true;
+        cookieInput.required = false;
+    }
+}
+
+// ============================================
 // ENTRY SUBMISSION
 // ============================================
 
@@ -84,9 +120,20 @@ function submitEntry(e) {
     e.preventDefault();
 
     const name = document.getElementById('participant-name').value.trim();
-    const email = document.getElementById('participant-email').value.trim();
     const phone = document.getElementById('participant-phone').value.trim();
     const agreeTerms = document.getElementById('agree-terms').checked;
+
+    let email = '';
+    let cookie = '';
+
+    // Get email or cookie based on mode
+    if (currentEntryMode === 'cookie') {
+        cookie = document.getElementById('participant-cookie').value.trim();
+        // Use cookie as the unique identifier (stored as email)
+        email = cookie; // Cookie will be stored as email
+    } else {
+        email = document.getElementById('participant-email').value.trim();
+    }
 
     // Validation
     if (!name || !email) {
@@ -99,12 +146,12 @@ function submitEntry(e) {
         return;
     }
 
-    // Check for duplicate email
+    // Check for duplicate
     const entries = getEntries();
-    const duplicate = entries.find(entry => entry.email.toLowerCase() === email.toLowerCase());
+    const duplicate = entries.find(entry => entry.email === email);
 
     if (duplicate) {
-        showNotification('This email has already been entered in the raffle', 'error');
+        showNotification(currentEntryMode === 'cookie' ? 'This cookie has already been entered in the raffle' : 'This email has already been entered in the raffle', 'error');
         return;
     }
 
@@ -112,10 +159,11 @@ function submitEntry(e) {
     const entry = {
         id: Date.now(),
         name,
-        email,
+        email, // For cookie mode, this contains the cookie
         phone,
         timestamp: new Date().toISOString(),
-        submittedFrom: 'public'
+        submittedFrom: currentEntryMode === 'cookie' ? 'cookie' : 'public',
+        isCookieEntry: currentEntryMode === 'cookie'
     };
 
     // Save entry
@@ -123,7 +171,11 @@ function submitEntry(e) {
     saveEntries(entries);
 
     // Show success
-    showSuccess(email);
+    if (currentEntryMode === 'cookie') {
+        showSuccess('your cookie submission');
+    } else {
+        showSuccess(email);
+    }
     showNotification('Entry submitted successfully!', 'success');
 }
 

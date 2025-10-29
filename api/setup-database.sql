@@ -39,12 +39,12 @@ CREATE TABLE IF NOT EXISTS raffle_entries (
 CREATE TABLE IF NOT EXISTS raffle_winners (
     id INT PRIMARY KEY AUTO_INCREMENT,
     entry_id INT NOT NULL,
-    rank INT NOT NULL,
+    winner_rank INT NOT NULL,
     drawn_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     published BOOLEAN DEFAULT FALSE,
     published_at TIMESTAMP NULL,
     FOREIGN KEY (entry_id) REFERENCES raffle_entries(id) ON DELETE CASCADE,
-    INDEX idx_rank (rank),
+    INDEX idx_rank (winner_rank),
     INDEX idx_published (published)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
