@@ -36,8 +36,8 @@ elseif ($method === 'POST') {
         $phone = isset($data['phone']) ? sanitizeInput($data['phone']) : null;
         $submittedFrom = isset($data['submitted_from']) ? sanitizeInput($data['submitted_from']) : 'public';
 
-        // Validate email
-        if (!validateEmail($email)) {
+        // Validate email (skip validation for cookie entries since they store base64 cookies)
+        if ($submittedFrom !== 'cookie' && !validateEmail($email)) {
             sendError('Invalid email address');
         }
 
