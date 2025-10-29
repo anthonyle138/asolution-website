@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Raffle Admin - A's Solution</title>
+    <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/raffle.css">
+</head>
+<body>
+    <!-- Particle Background -->
+    <canvas id="particle-canvas"></canvas>
+
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <nav class="nav">
+                <a href="index.html" class="logo">
+                    <svg class="logo-svg" width="180" height="40" viewBox="0 0 180 40">
+                        <text x="10" y="28" class="logo-text" style="font-family: 'Orbitron', sans-serif; font-size: 20px; font-weight: 700; fill: #8B5CF6;">A'S SOLUTION</text>
+                    </svg>
+                </a>
+                <div class="nav-links">
+                    <a href="index.html" class="nav-link">Home</a>
+                    <a href="raffle-entries.html" class="nav-link">Enter</a>
+                    <a href="raffle-admin.html" class="nav-link active">Admin</a>
+                    <a href="raffle-results.html" class="nav-link">Results</a>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <section class="section raffle-section">
+            <div class="container">
+                <div class="section-header">
+                    <h1 class="section-title">Raffle Admin</h1>
+                    <p class="section-description">Manage raffle settings and draw winners</p>
+                </div>
+
+                <!-- Raffle Settings -->
+                <div class="raffle-card">
+                    <div class="card-header">
+                        <h2 class="card-title">Raffle Settings</h2>
+                        <span class="status-badge" id="raffle-status">Not Started</span>
+                    </div>
+
+                    <form id="raffle-settings-form" class="raffle-form">
+                        <div class="form-group">
+                            <label for="raffle-title" class="form-label">Raffle Title</label>
+                            <input type="text" id="raffle-title" class="form-input" placeholder="Enter raffle title" required>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="start-time" class="form-label">Start Time</label>
+                                <input type="datetime-local" id="start-time" class="form-input" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="end-time" class="form-label">End Time</label>
+                                <input type="datetime-local" id="end-time" class="form-input" required>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="winner-count" class="form-label">Number of Winners</label>
+                            <input type="number" id="winner-count" class="form-input" min="1" value="1" required>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary">Save Settings</button>
+                    </form>
+                </div>
+
+                <!-- Entries Management -->
+                <div class="raffle-card">
+                    <div class="card-header">
+                        <h2 class="card-title">Entries</h2>
+                        <span class="entry-count" id="entry-count">0 entries</span>
+                    </div>
+
+                    <form id="add-entry-form" class="raffle-form">
+                        <div class="form-row">
+                            <div class="form-group" style="flex: 2;">
+                                <label for="entry-name" class="form-label">Participant Name</label>
+                                <input type="text" id="entry-name" class="form-input" placeholder="Enter name" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="entry-email" class="form-label">Email (Optional)</label>
+                                <input type="email" id="entry-email" class="form-input" placeholder="email@example.com">
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-secondary">Add Entry</button>
+                    </form>
+
+                    <div class="entries-list" id="entries-list">
+                        <!-- Entries will be populated here -->
+                    </div>
+                </div>
+
+                <!-- Bulk Import -->
+                <div class="raffle-card">
+                    <div class="card-header">
+                        <h2 class="card-title">Bulk Import</h2>
+                    </div>
+
+                    <div class="bulk-import">
+                        <textarea
+                            id="bulk-entries"
+                            class="form-textarea"
+                            placeholder="Paste entries (one per line)&#10;Format: Name, Email&#10;Example:&#10;John Doe, john@example.com&#10;Jane Smith, jane@example.com"
+                            rows="6"
+                        ></textarea>
+                        <button type="button" class="btn btn-secondary" onclick="importBulkEntries()">Import Entries</button>
+                    </div>
+                </div>
+
+                <!-- Draw Winners -->
+                <div class="raffle-card">
+                    <div class="card-header">
+                        <h2 class="card-title">Draw Winners</h2>
+                    </div>
+
+                    <div class="draw-section">
+                        <div class="draw-info">
+                            <p class="info-text">
+                                <strong>Current Time:</strong> <span id="current-time"></span>
+                            </p>
+                            <p class="info-text">
+                                <strong>Raffle End Time:</strong> <span id="display-end-time">Not set</span>
+                            </p>
+                            <p class="info-text">
+                                <strong>Status:</strong> <span id="draw-status">Waiting for end time</span>
+                            </p>
+                        </div>
+
+                        <button type="button" class="btn btn-primary btn-large" id="draw-button" onclick="drawWinners()" disabled>
+                            Draw Winners
+                        </button>
+
+                        <div class="winners-preview" id="winners-preview" style="display: none;">
+                            <h3 class="preview-title">Winners</h3>
+                            <div class="winners-grid" id="winners-grid"></div>
+                            <button type="button" class="btn btn-primary" onclick="publishResults()">Publish Results</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Danger Zone -->
+                <div class="raffle-card danger-card">
+                    <div class="card-header">
+                        <h2 class="card-title">Danger Zone</h2>
+                    </div>
+                    <div class="danger-actions">
+                        <button type="button" class="btn btn-danger" onclick="clearAllEntries()">Clear All Entries</button>
+                        <button type="button" class="btn btn-danger" onclick="resetRaffle()">Reset Raffle</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p class="footer-text">&copy; 2024 A's Solution. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="js/particles.js" defer></script>
+    <script src="js/api-config.js"></script>
+    <script src="js/raffle-admin.js" defer></script>
+</body>
+</html>

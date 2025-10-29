@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Raffle Results - A's Solution</title>
+    <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/raffle.css">
+</head>
+<body>
+    <!-- Particle Background -->
+    <canvas id="particle-canvas"></canvas>
+
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <nav class="nav">
+                <a href="index.html" class="logo">
+                    <svg class="logo-svg" width="180" height="40" viewBox="0 0 180 40">
+                        <text x="10" y="28" class="logo-text" style="font-family: 'Orbitron', sans-serif; font-size: 20px; font-weight: 700; fill: #8B5CF6;">A'S SOLUTION</text>
+                    </svg>
+                </a>
+                <div class="nav-links">
+                    <a href="index.html" class="nav-link">Home</a>
+                    <a href="raffle-entries.html" class="nav-link">Enter</a>
+                    <a href="raffle-admin.html" class="nav-link">Admin</a>
+                    <a href="raffle-results.html" class="nav-link active">Results</a>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <section class="section results-section">
+            <div class="container">
+                <div class="section-header">
+                    <h1 class="section-title glow-text" id="raffle-title">Raffle Results</h1>
+                    <p class="section-description" id="raffle-description">Winners have been selected!</p>
+                </div>
+
+                <!-- Raffle Info -->
+                <div class="raffle-info-card">
+                    <div class="info-grid">
+                        <div class="info-item">
+                            <span class="info-label">Total Entries</span>
+                            <span class="info-value" id="total-entries">0</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">Winners Selected</span>
+                            <span class="info-value" id="winner-count">0</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">Draw Date</span>
+                            <span class="info-value" id="draw-date">-</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Winners Display -->
+                <div class="winners-section" id="winners-section">
+                    <h2 class="winners-title">🏆 Winners</h2>
+                    <div class="winners-container" id="winners-container">
+                        <!-- Winners will be populated here -->
+                    </div>
+                </div>
+
+                <!-- No Results Message -->
+                <div class="no-results" id="no-results" style="display: none;">
+                    <div class="no-results-icon">🎲</div>
+                    <h3 class="no-results-title">No Winners Yet</h3>
+                    <p class="no-results-text">The raffle draw hasn't been conducted yet. Check back soon!</p>
+                    <a href="raffle-admin.html" class="btn btn-primary">Go to Admin Panel</a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p class="footer-text">&copy; 2024 A's Solution. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="js/particles.js" defer></script>
+    <script src="js/api-config.js"></script>
+    <script src="js/raffle-results.js" defer></script>
+</body>
+</html>

@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enter Raffle - A's Solution</title>
+    <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/raffle.css">
+</head>
+<body>
+    <!-- Particle Background -->
+    <canvas id="particle-canvas"></canvas>
+
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <nav class="nav">
+                <a href="index.html" class="logo">
+                    <svg class="logo-svg" width="180" height="40" viewBox="0 0 180 40">
+                        <text x="10" y="28" class="logo-text" style="font-family: 'Orbitron', sans-serif; font-size: 20px; font-weight: 700; fill: #8B5CF6;">A'S SOLUTION</text>
+                    </svg>
+                </a>
+                <div class="nav-links">
+                    <a href="index.html" class="nav-link">Home</a>
+                    <a href="raffle-entries.html" class="nav-link active">Enter</a>
+                    <a href="raffle-admin.html" class="nav-link">Admin</a>
+                    <a href="raffle-results.html" class="nav-link">Results</a>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <section class="section entries-section">
+            <div class="container">
+                <!-- Raffle Info Header -->
+                <div class="section-header">
+                    <h1 class="section-title glow-text" id="raffle-title">Enter Raffle</h1>
+                    <p class="section-description" id="raffle-description">Fill out the form below to enter</p>
+                </div>
+
+                <!-- Raffle Status Card -->
+                <div class="raffle-info-card">
+                    <div class="info-grid">
+                        <div class="info-item">
+                            <span class="info-label">Status</span>
+                            <span class="status-badge" id="raffle-status">Loading...</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">Starts</span>
+                            <span class="info-value-small" id="start-time-display">-</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">Ends</span>
+                            <span class="info-value-small" id="end-time-display">-</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">Winners</span>
+                            <span class="info-value-small" id="winner-count-display">-</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Entry Form -->
+                <div class="raffle-card entry-form-card" id="entry-form-card">
+                    <div class="card-header">
+                        <h2 class="card-title">Submit Your Entry</h2>
+                    </div>
+
+                    <form id="entry-form" class="raffle-form">
+                        <div class="form-group">
+                            <label for="participant-name" class="form-label">Your Name *</label>
+                            <input
+                                type="text"
+                                id="participant-name"
+                                class="form-input"
+                                placeholder="Enter your full name"
+                                required
+                                maxlength="100"
+                            >
+                        </div>
+
+                        <div class="form-group">
+                            <label for="participant-email" class="form-label">Email Address *</label>
+                            <input
+                                type="email"
+                                id="participant-email"
+                                class="form-input"
+                                placeholder="your.email@example.com"
+                                required
+                                maxlength="100"
+                            >
+                            <span class="form-hint">We'll notify you if you win!</span>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="participant-phone" class="form-label">Phone Number (Optional)</label>
+                            <input
+                                type="tel"
+                                id="participant-phone"
+                                class="form-input"
+                                placeholder="+1 (555) 123-4567"
+                                maxlength="20"
+                            >
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-checkbox">
+                                <input type="checkbox" id="agree-terms" required>
+                                <span>I agree to the terms and conditions *</span>
+                            </label>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary btn-large" id="submit-button">
+                            Submit Entry
+                        </button>
+                    </form>
+                </div>
+
+                <!-- Success Message -->
+                <div class="success-card" id="success-card" style="display: none;">
+                    <div class="success-icon">✓</div>
+                    <h2 class="success-title">Entry Submitted!</h2>
+                    <p class="success-text">
+                        Thank you for entering the raffle! We've recorded your entry.
+                    </p>
+                    <p class="success-email" id="confirmation-email"></p>
+                    <div class="success-actions">
+                        <a href="raffle-results.html" class="btn btn-secondary">View Results</a>
+                        <button type="button" class="btn btn-primary" onclick="submitAnother()">Submit Another Entry</button>
+                    </div>
+                </div>
+
+                <!-- Closed Message -->
+                <div class="closed-card" id="closed-card" style="display: none;">
+                    <div class="closed-icon">🔒</div>
+                    <h2 class="closed-title">Raffle Not Available</h2>
+                    <p class="closed-text" id="closed-message">
+                        The raffle is not currently accepting entries.
+                    </p>
+                    <div class="closed-actions">
+                        <a href="raffle-results.html" class="btn btn-primary">View Results</a>
+                        <a href="index.html" class="btn btn-secondary">Go Home</a>
+                    </div>
+                </div>
+
+                <!-- Entry Guidelines -->
+                <div class="guidelines-card">
+                    <h3 class="guidelines-title">📋 Entry Guidelines</h3>
+                    <ul class="guidelines-list">
+                        <li>One entry per email address</li>
+                        <li>Entries must be submitted before the end time</li>
+                        <li>Winners will be selected randomly</li>
+                        <li>Winners will be notified via email</li>
+                        <li>All entries are final once submitted</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p class="footer-text">&copy; 2024 A's Solution. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="js/particles.js" defer></script>
+    <script src="js/api-config.js"></script>
+    <script src="js/raffle-entries.js" defer></script>
+</body>
+</html>

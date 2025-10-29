@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hướng Dẫn Cài Đặt Extension - A's Solution</title>
+    <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/raffle.css">
+</head>
+<body>
+    <!-- Particle Background -->
+    <canvas id="particle-canvas"></canvas>
+
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <nav class="nav">
+                <a href="index.html" class="logo">
+                    <svg class="logo-svg" width="180" height="40" viewBox="0 0 180 40">
+                        <text x="10" y="28" class="logo-text" style="font-family: 'Orbitron', sans-serif; font-size: 20px; font-weight: 700; fill: #8B5CF6;">A'S SOLUTION</text>
+                    </svg>
+                </a>
+                <div class="nav-links">
+                    <a href="index.html" class="nav-link">Home</a>
+                    <a href="extension-guide.html" class="nav-link active">Extension Guide</a>
+                    <a href="raffle-entries.html" class="nav-link">Raffle</a>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <section class="section guide-section">
+            <div class="container">
+                <div class="section-header">
+                    <h1 class="section-title glow-text">Hướng Dẫn Cài Đặt Extension</h1>
+                    <p class="section-description">Cài đặt Chrome Extension để sao chép cookies từ Shopee</p>
+                </div>
+
+                <!-- Download Section -->
+                <div class="raffle-card">
+                    <div class="card-header">
+                        <h2 class="card-title">📥 Tải Extension</h2>
+                    </div>
+                    <div style="padding: 24px; text-align: center;">
+                        <p style="margin-bottom: 24px; font-size: 1.125rem; color: var(--color-text-primary);">
+                            Tải file extension về máy của bạn
+                        </p>
+                        <a href="https://shopee-bot-releases.s3.amazonaws.com/chrome-extensions/As-chrome-extension-1.0.0.zip"
+                           class="btn btn-primary btn-large"
+                           download
+                           style="display: inline-block;">
+                            🔽 Tải A's Chrome Extension v1.0.0
+                        </a>
+                        <p style="margin-top: 16px; font-size: 0.875rem; color: var(--color-text-secondary);">
+                            File: As-chrome-extension-1.0.0.zip
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Installation Steps -->
+                <div class="raffle-card">
+                    <div class="card-header">
+                        <h2 class="card-title">📝 Các Bước Cài Đặt</h2>
+                    </div>
+
+                    <div class="guide-steps">
+                        <!-- Step 1 -->
+                        <div class="step-card">
+                            <div class="step-number">1</div>
+                            <div class="step-content">
+                                <h3 class="step-title">Giải Nén File ZIP</h3>
+                                <p class="step-description">
+                                    Sau khi tải về, giải nén file <code>As-chrome-extension-1.0.0.zip</code> vào một thư mục bất kỳ trên máy tính của bạn.
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- Step 2 -->
+                        <div class="step-card">
+                            <div class="step-number">2</div>
+                            <div class="step-content">
+                                <h3 class="step-title">Mở Chrome Extensions</h3>
+                                <p class="step-description">
+                                    Mở trình duyệt Chrome và truy cập <code>chrome://extensions/</code> hoặc:
+                                </p>
+                                <ul class="step-list">
+                                    <li>Nhấn vào menu 3 chấm ở góc phải trên</li>
+                                    <li>Chọn <strong>More tools</strong> → <strong>Extensions</strong></li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <!-- Step 3 -->
+                        <div class="step-card">
+                            <div class="step-number">3</div>
+                            <div class="step-content">
+                                <h3 class="step-title">Bật Developer Mode</h3>
+                                <p class="step-description">
+                                    Ở góc phải trên của trang Extensions, bật công tắc <strong>Developer mode</strong>.
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- Step 4 -->
+                        <div class="step-card">
+                            <div class="step-number">4</div>
+                            <div class="step-content">
+                                <h3 class="step-title">Load Extension</h3>
+                                <p class="step-description">
+                                    Nhấn vào nút <strong>Load unpacked</strong> và chọn thư mục bạn đã giải nén ở bước 1.
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- Step 5 -->
+                        <div class="step-card">
+                            <div class="step-number">5</div>
+                            <div class="step-content">
+                                <h3 class="step-title">Pin Extension</h3>
+                                <p class="step-description">
+                                    Nhấn vào biểu tượng puzzle (Extensions) trên thanh công cụ Chrome, tìm <strong>A's Extension</strong> và nhấn vào biểu tượng ghim để giữ extension luôn hiển thị.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Usage Guide -->
+                <div class="raffle-card">
+                    <div class="card-header">
+                        <h2 class="card-title">🔧 Cách Sử Dụng</h2>
+                    </div>
+
+                    <div class="guide-steps">
+                        <!-- Usage Step 1 -->
+                        <div class="step-card">
+                            <div class="step-number">1</div>
+                            <div class="step-content">
+                                <h3 class="step-title">Đăng Nhập Shopee</h3>
+                                <p class="step-description">
+                                    Truy cập <a href="https://shopee.vn" target="_blank" class="link-primary">https://shopee.vn</a> và đăng nhập vào tài khoản của bạn.
+                                </p>
+                                <div class="warning-box">
+                                    <strong>⚠️ Quan trọng:</strong> Đảm bảo bạn đang ở <strong>trang chủ Shopee</strong> và khu vực phù hợp với tài khoản của bạn (VN cho Việt Nam).
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Usage Step 2 -->
+                        <div class="step-card">
+                            <div class="step-number">2</div>
+                            <div class="step-content">
+                                <h3 class="step-title">Nhấn Vào Extension</h3>
+                                <p class="step-description">
+                                    Sau khi đăng nhập thành công, nhấn vào biểu tượng <strong>A's Extension</strong> trên thanh công cụ Chrome.
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- Usage Step 3 -->
+                        <div class="step-card">
+                            <div class="step-number">3</div>
+                            <div class="step-content">
+                                <h3 class="step-title">Sao Chép Cookies</h3>
+                                <p class="step-description">
+                                    Extension sẽ tự động hiển thị cookies dưới dạng <strong>Base64</strong>. Nhấn nút <strong>Copy Cookies</strong> để sao chép.
+                                </p>
+                                <div class="success-box">
+                                    <strong>✅ Thành công!</strong> Cookies đã được sao chép vào clipboard. Bạn có thể dán (Ctrl+V) vào nơi cần sử dụng.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Important Notes -->
+                <div class="raffle-card" style="border-color: rgba(234, 179, 8, 0.3);">
+                    <div class="card-header">
+                        <h2 class="card-title" style="color: #eab308;">⚠️ Lưu Ý Quan Trọng</h2>
+                    </div>
+
+                    <div class="guidelines-card" style="background: transparent; border: none; padding: 0;">
+                        <ul class="guidelines-list" style="margin-top: 0;">
+                            <li><strong>Bảo mật:</strong> Cookies chứa thông tin đăng nhập của bạn. Không chia sẻ với người không tin cậy.</li>
+                            <li><strong>Khu vực:</strong> Đảm bảo cookies được sao chép từ đúng khu vực (VN cho Shopee Việt Nam).</li>
+                            <li><strong>Trang chủ:</strong> Cookies phải được sao chép từ trang chủ Shopee, không phải trang sản phẩm.</li>
+                            <li><strong>Hết hạn:</strong> Cookies có thể hết hạn sau một thời gian, cần sao chép lại nếu cần.</li>
+                            <li><strong>Đăng xuất:</strong> Nếu bạn đăng xuất Shopee, cookies sẽ không còn hợp lệ.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Troubleshooting -->
+                <div class="raffle-card">
+                    <div class="card-header">
+                        <h2 class="card-title">🔍 Khắc Phục Sự Cố</h2>
+                    </div>
+
+                    <div class="faq-container">
+                        <div class="faq-item">
+                            <h3 class="faq-question">❓ Extension không hiển thị cookies?</h3>
+                            <p class="faq-answer">
+                                Đảm bảo bạn đã đăng nhập Shopee và đang ở trang chủ. Thử tải lại trang (F5) và nhấn lại extension.
+                            </p>
+                        </div>
+
+                        <div class="faq-item">
+                            <h3 class="faq-question">❓ Extension không cài được?</h3>
+                            <p class="faq-answer">
+                                Kiểm tra lại đã bật <strong>Developer mode</strong> chưa. Đảm bảo bạn chọn đúng thư mục đã giải nén.
+                            </p>
+                        </div>
+
+                        <div class="faq-item">
+                            <h3 class="faq-question">❓ Cookies không hoạt động?</h3>
+                            <p class="faq-answer">
+                                Cookies có thể đã hết hạn hoặc bạn đã đăng xuất. Thử đăng nhập lại và sao chép cookies mới.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Support -->
+                <div class="closed-card" style="display: block; border-color: rgba(139, 92, 246, 0.3);">
+                    <div class="closed-icon">💬</div>
+                    <h2 class="closed-title">Cần Hỗ Trợ?</h2>
+                    <p class="closed-text">
+                        Nếu bạn gặp vấn đề hoặc cần thêm hướng dẫn, vui lòng liên hệ với chúng tôi.
+                    </p>
+                    <div class="closed-actions">
+                        <a href="index.html" class="btn btn-primary">Về Trang Chủ</a>
+                        <a href="raffle-entries.html" class="btn btn-secondary">Tham Gia Raffle</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p class="footer-text">&copy; 2024 A's Solution. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="js/particles.js" defer></script>
+
+    <style>
+        .guide-steps {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+            padding: 24px;
+        }
+
+        .step-card {
+            display: flex;
+            gap: 20px;
+            padding: 24px;
+            background: rgba(10, 10, 20, 0.4);
+            border: 1px solid rgba(139, 92, 246, 0.2);
+            border-radius: 12px;
+            transition: all 0.3s ease;
+        }
+
+        .step-card:hover {
+            border-color: rgba(139, 92, 246, 0.4);
+            transform: translateY(-2px);
+        }
+
+        .step-number {
+            flex-shrink: 0;
+            width: 48px;
+            height: 48px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, var(--color-purple-primary), var(--color-cyan));
+            border-radius: 12px;
+            font-size: 1.5rem;
+            font-weight: 700;
+            font-family: var(--font-heading);
+            color: white;
+        }
+
+        .step-content {
+            flex: 1;
+        }
+
+        .step-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--color-text-primary);
+            margin-bottom: 12px;
+            font-family: var(--font-heading);
+        }
+
+        .step-description {
+            color: var(--color-text-secondary);
+            line-height: 1.6;
+            margin-bottom: 12px;
+        }
+
+        .step-list {
+            list-style: none;
+            padding-left: 0;
+            margin: 12px 0;
+        }
+
+        .step-list li {
+            padding-left: 24px;
+            position: relative;
+            margin-bottom: 8px;
+            color: var(--color-text-secondary);
+        }
+
+        .step-list li::before {
+            content: '→';
+            position: absolute;
+            left: 0;
+            color: var(--color-purple-primary);
+            font-weight: 700;
+        }
+
+        code {
+            background: rgba(139, 92, 246, 0.1);
+            border: 1px solid rgba(139, 92, 246, 0.3);
+            border-radius: 4px;
+            padding: 2px 8px;
+            font-family: var(--font-mono);
+            font-size: 0.9em;
+            color: var(--color-cyan);
+        }
+
+        .warning-box, .success-box {
+            margin-top: 16px;
+            padding: 16px;
+            border-radius: 8px;
+            font-size: 0.875rem;
+        }
+
+        .warning-box {
+            background: rgba(234, 179, 8, 0.1);
+            border: 1px solid rgba(234, 179, 8, 0.3);
+            color: #fde047;
+        }
+
+        .success-box {
+            background: rgba(34, 197, 94, 0.1);
+            border: 1px solid rgba(34, 197, 94, 0.3);
+            color: #86efac;
+        }
+
+        .link-primary {
+            color: var(--color-cyan);
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.2s;
+        }
+
+        .link-primary:hover {
+            color: var(--color-purple-primary);
+            text-decoration: underline;
+        }
+
+        .faq-container {
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .faq-item {
+            padding: 20px;
+            background: rgba(10, 10, 20, 0.4);
+            border: 1px solid rgba(139, 92, 246, 0.15);
+            border-radius: 12px;
+        }
+
+        .faq-question {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: var(--color-text-primary);
+            margin-bottom: 12px;
+        }
+
+        .faq-answer {
+            color: var(--color-text-secondary);
+            line-height: 1.6;
+            margin: 0;
+        }
+
+        @media (max-width: 768px) {
+            .step-card {
+                flex-direction: column;
+                gap: 16px;
+            }
+
+            .step-number {
+                width: 40px;
+                height: 40px;
+                font-size: 1.25rem;
+            }
+        }
+    </style>
+</body>
+</html>
